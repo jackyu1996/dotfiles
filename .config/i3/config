@@ -117,7 +117,7 @@ bindsym $mod+p exec passmenu -i
 bindsym $mod+g exec goldendict
 bindsym $mod+n exec rofi -show window
 bindsym $mod+Shift+q kill
-bindsym $mod+Shift+x exec $HOME/.scripts/lock
+bindsym $mod+Shift+x exec i3lock -c 000000
 bindsym XF86AudioMute exec amixer sset Master toggle && notify-send "Volume" "Muted"
 bindsym XF86AudioLowerVolume exec amixer sset Master 5%- && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
 bindsym XF86AudioRaiseVolume exec amixer sset Master 5%+ && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
