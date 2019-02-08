@@ -1,0 +1,26 @@
+snippet tp "Title Page" b
+\begin{titlepage}
+    \vspace*{10em}
+    \begin{center}
+        {\huge $1}
+		\vspace{\stretch{4}}
+        \begin{table}[htpb]
+            \centering
+            \begin{tabular}{rc}
+                姓名 & \underline{\makebox[2in][c]{$2}} \\\
+                学号 & \underline{\makebox[2in][c]{$3}} \\\
+                班级 & \underline{\makebox[2in][c]{$4}} \\\
+            \end{tabular}
+        \end{table}
+    \end{center}
+	\vspace{\stretch{2}}
+\end{titlepage}
+endsnippet
+
+snippet a4c "A4 for ctexart" b
+\documentclass[a4paper]{ctexart}
+endsnippet
+
+snippet a4 "A4 for article" b
+\documentclass[a4paper]{article}
+endsnippet
