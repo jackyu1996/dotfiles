@@ -1,0 +1,39 @@
+alias ..='cd ..'
+alias ...='cd ../..'
+alias G='| rg'
+alias H='| head'
+alias L='| less'
+alias LL='2>&1 | less'
+alias NE='2> /dev/null'
+alias NUL='> /dev/null 2>&1'
+alias T='| tail'
+alias _=sudo
+alias ch='chromium --proxy-server=socks5://127.0.0.1:1080 --disk-cache-dir=/tmp/chromium_cache'
+alias cp='cp -i'
+alias d='dirs -v | head -10'
+alias g=git
+alias ga=forgit::add
+alias gca='git commit --amend --no-edit'
+alias gcsm='git commit -m'
+alias gcf=forgit::restore
+alias gcl='git clone --recurse-submodules'
+alias gco='git checkout'
+alias gd=forgit::diff
+alias gf='git fetch'
+alias glo=forgit::log
+alias gp='git push'
+alias gpf='git push --force-with-lease'
+alias gst='git status'
+alias jn='jupyter notebook &> /dev/null &'
+alias l='ls -lFh'
+alias la='ls -lAFh'
+alias ll='ls -l'
+alias ls='ls --color=tty'
+alias md='mkdir -p'
+alias mv='mv -i'
+alias pro='export http_proxy=http://127.0.0.1:8080;export https_proxy=http://127.0.0.1:8080'
+alias ra=ranger
+alias rm='rm -i'
+alias v=vim
+alias xc='xclip -sel clip'
+alias ytd='youtube-dl -i --proxy='\''socks5://127.0.0.1:1080/'\'' -o '\''%(title)s.%(ext)s'\'

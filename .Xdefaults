@@ -4,12 +4,12 @@ Xft*hinting:                 true
 Xft*hintstyle:               hintslight
 
 ! URxvt Settings
-URxvt*font:                  xft:Monaco:pixelsize=19,xft:WenQuanYi MicroHei Mono:pixelsize=19:minspace=false,xft:Inconsolata Nerd Font Mono:pixelsize=19:minspace=false
+URxvt*font:                  xft:Noto Sans Mono:size=13,xft:Noto Sans CJK SC:size=13,xft:Hack Nerd Font Mono:size=13
 URxvt*letterSpace:           0
 URxvt*loginShell:            true
-URxvt*termName:              screen-256color
+URxvt*termName:              xterm-256color
 URxvt*shading:               10
-URxvt*saveLines:             20000
+URxvt*saveLines:             50000
 URxvt*depth:                 32
 URxvt*scrollBar:             false
 URxvt*cursorBlink:           true
@@ -39,16 +39,15 @@ URxvt*perl-ext-common:
 *color15:                    #c5c8c6
 
 !! Rofi Configs
-rofi.font:                   Monaco 12
+rofi.font:                   monospace 11
 rofi.bw:                     0
 rofi.fixed-num-lines:        false
 rofi.show-icons:             true
-rofi.terminal:               termite
+rofi.terminal:               urxvt
 rofi.sort:                   true
 rofi.levenshtein-sort:       true
-rofi.combi-modi:             window,run
 rofi.fake-transparency:      true
 rofi.fake-background:        background
 rofi.window-format:          {t}
-rofi.theme:                  android_notification
+rofi.theme:                  dmenu
 rofi.combi-hide-mode-prefix: true

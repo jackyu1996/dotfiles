@@ -23,7 +23,7 @@
 (setq-default indent-tabs-mode nil)
 (global-display-line-numbers-mode)
 (fset 'yes-or-no-p 'y-or-n-p)
-(set-frame-font "Monaco-12" t t)
+(set-frame-font "monospace-12" t t)
 (put 'narrow-to-region 'disabled nil)
 
 ;Package Configs

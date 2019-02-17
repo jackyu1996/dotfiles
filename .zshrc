@@ -1,11 +1,6 @@
 # git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 source "${HOME}/.zgen/zgen.zsh"
 if ! zgen-saved; then
-    zgen oh-my-zsh
-    zgen oh-my-zsh plugins/vi-mode
-    zgen oh-my-zsh plugins/git
-    zgen oh-my-zsh plugins/common-aliases
-
     zgen load geometry-zsh/geometry
     zgen load wfxr/forgit
     zgen load RobSis/zsh-completion-generator
@@ -17,18 +12,35 @@ if ! zgen-saved; then
 
     zgen save
 fi
-source ~/.fzf.zsh
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' list-colors ''
+
+zle -N edit-command-line
+bindkey -v
+autoload -Uz edit-command-line
+bindkey -M vicmd 'v' edit-command-line
+bindkey '^P' up-history
+bindkey '^N' down-history
+bindkey '^h' backward-delete-char
+bindkey '^r' history-incremental-search-backward
+bindkey '^w' backward-kill-word
+bindkey '^a' beginning-of-line
+bindkey '^e' end-of-line
+
+WORDCHARS='*?-[]~=&;!#$%^(){}<>'
+
+HISTFILE=~/.zsh_history
+HISTSIZE=5000
+SAVEHIST=5000
 
 export VISUAL=vim
 export GOPATH=$HOME/.go
 export PATH=$PATH:$GOPATH/bin:$HOME/.npm/bin:$HOME/.scripts/:
 export TERM=xterm-256color
+export PROMPT_GEOMETRY_GIT_TIME=false
 
-alias diff='diff --color=auto'
-alias jn="jupyter notebook &> /dev/null &"
-alias pro="export http_proxy=http://127.0.0.1:8080;export https_proxy=http://127.0.0.1:8080"
-alias ra="ranger"
-alias v="vim"
-alias xc="xclip -sel clip"
-alias ytd="youtube-dl -i --proxy='socks5://127.0.0.1:1080/' -o '%(title)s.%(ext)s'"
-alias ch="chromium --proxy-server=socks5://127.0.0.1:1080 --disk-cache-dir=/tmp/chromium_cache"
+source ~/.fzf.zsh
+source ~/.aliases

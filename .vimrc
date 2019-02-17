@@ -16,7 +16,6 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 Plug 'junegunn/vim-easy-align'
 Plug 'lervag/vimtex', { 'for': 'tex' }
-Plug 'luochen1990/rainbow'
 Plug 'ledger/vim-ledger', { 'for': 'ledger' }
 Plug 'majutsushi/tagbar', { 'on': 'Tagbar' }
 Plug 'mattn/emmet-vim'
@@ -26,6 +25,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'sirver/ultisnips'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-abolish', { 'on': 'Abolish' }
+Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-surround'
 Plug 'w0ng/vim-hybrid'
 Plug 'w0rp/ale'
@@ -41,6 +41,7 @@ set autoindent
 set autoread
 set background=dark
 set backspace=indent,eol,start
+set clipboard=unnamedplus
 set completeopt=longest,menuone,preview
 set conceallevel=1
 set encoding=utf-8
@@ -48,9 +49,12 @@ set expandtab
 set foldenable
 set foldmethod=indent
 set guioptions="a"
+set ignorecase
 set incsearch
 set laststatus=2
 set lazyredraw
+set list
+set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
 set nostartofline
 set number
 set omnifunc=syntaxcomplete#Complete
@@ -60,6 +64,7 @@ set shiftwidth=4
 set showcmd
 set showmatch
 set showmode
+set smartcase
 set smartindent
 set smarttab
 set softtabstop=4
@@ -75,12 +80,16 @@ colorscheme hybrid
 "}}}
 " Ale{{{
 let g:ale_linters = {
-            \'python':['autopep8'],
             \'bash': ['shellcheck'],
+            \'c': ['clangtidy'],
+            \'cpp': ['clangtidy'],
             \'javascript': ['eslint'],
+            \'python':['flake8'],
             \}
 let g:ale_sign_error = '×'
 let g:ale_sign_warning = '·'
+let g:ale_set_quickfix = 1
+let g:ale_set_locllist = 0
 "}}}
 " Autoformat{{{
 let g:formatters_javascript = ['eslint_local']
@@ -107,9 +116,6 @@ let g:lightline = {'colorscheme': 'powerline'}
 " Limelight {{{
 let g:limelight_default_coefficient = 0.7
 " }}}
-" Rainbow{{{
-let g:rainbow_active = 1
-"}}}
 " Tagbar{{{
 let g:tagbar_sort = 0
 let g:tagbar_type_markdown = {
@@ -120,27 +126,23 @@ let g:tagbar_type_markdown = {
             \]
             \}
 "}}}
-" Vimtex {{{
+" Vimtex{{{
 let g:vimtex_view_method = "zathura"
 if empty(v:servername) && exists('*remote_startserver')
     call remote_startserver('VIM')
 endif
 " }}}
-" Xlicp{{{
-nnoremap <F8> :call system('xclip -sel clip', @0)<CR>
-"}}}
 " Youcompleteme{{{
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tag_files = 1
 let g:ycm_complete_in_comments = 1
-let g:ycm_confirm_extra_conf = 0
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_min_num_of_chars_for_completion = 99
+let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_min_num_of_chars_for_completion = 100
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_show_diagnostics_ui = 0
-let g:ycm_use_ultisnips_completer = 1
 "}}}
 " Mappings{{{
 cnoremap <C-n> <down>
@@ -149,28 +151,29 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-nnoremap <leader>a :Ag<CR>
+nnoremap <F9> :Dispatch<CR>
 nnoremap <leader>b :Tagbar<CR>
 nnoremap <leader>d :YcmCompleter GoTo<CR>
-nnoremap <leader>e :lopen<CR>
+nnoremap <leader>e :cw<CR>
 nnoremap <leader>f :Autoformat<CR>
 nnoremap <leader>g :Goyo<CR>
 nnoremap <leader>h :set hlsearch!<CR>
 nnoremap <leader>n :Buffers<CR>
 nnoremap <leader>p :Files<CR>
-nnoremap <leader>x :qa!<CR>
 nnoremap <leader>q :q!<CR>
+nnoremap <leader>r :Rg<CR>
 nnoremap <leader>s :set spell!<CR>
 nnoremap <leader>w :w<CR>
+nnoremap <leader>x :qa!<CR>
 "}}}
 " Some Autocmd{{{
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \ execute "normal! g'\"" |
             \ endif
-autocmd FileType html,css,javascript,vue setlocal shiftwidth=2 tabstop=2
+autocmd FileType html,css,javascript,vue setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType yaml setlocal noexpandtab
-autocmd BufNewFile,Bufread *.lgr setfiletype ledger | compiler ledger
+autocmd BufNewFile,Bufread *.lgr setfiletype ledger
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
 "}}}

@@ -1,5 +1,5 @@
 [global]
-font = DejaVu Sans Mono 14
+font = monospace 13
 format = "<b>%s</b>\n%b"
 sort = yes
 indicate_hidden = yes
