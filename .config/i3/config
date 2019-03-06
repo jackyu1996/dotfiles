@@ -112,7 +112,7 @@ client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-col
 client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color          #00ff00
 
 bindsym $mod+Return exec $term
-bindsym $mod+d exec dmenu_run -p "WHAT YOU WANT!"
+bindsym $mod+d exec rofi -show run
 bindsym $mod+e exec LC_CTYPE=zh_CN.UTF-8 emacs
 bindsym $mod+p exec passmenu -i
 bindsym $mod+g exec goldendict

@@ -1,7 +1,10 @@
 ! Font Settings
 Xft*antialias:               true
+Xft*autohint:                false
 Xft*hinting:                 true
 Xft*hintstyle:               hintslight
+Xft*lcdfilter:               lcddefault
+Xft*rgba:                    rgb
 
 ! URxvt Settings
 URxvt*font:                  xft:Noto Sans Mono:size=13,xft:Noto Sans CJK SC:size=13,xft:Hack Nerd Font Mono:size=13
@@ -46,6 +49,8 @@ rofi.show-icons:             true
 rofi.terminal:               urxvt
 rofi.sort:                   true
 rofi.levenshtein-sort:       true
+rofi.display-run:            WHAT YOU WANT?
+rofi.display-window:         GO TO
 rofi.fake-transparency:      true
 rofi.fake-background:        background
 rofi.window-format:          {t}
