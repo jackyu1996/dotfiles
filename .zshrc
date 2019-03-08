@@ -19,9 +19,10 @@ zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' list-colors ''
 
 zle -N edit-command-line
-bindkey -v
 autoload -Uz edit-command-line
+bindkey -v
 bindkey -M vicmd 'v' edit-command-line
+
 bindkey '^P' up-history
 bindkey '^N' down-history
 bindkey '^h' backward-delete-char
@@ -30,15 +31,19 @@ bindkey '^w' backward-kill-word
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt pushdminus
+
 WORDCHARS='*?-[]~=&;!#$%^(){}<>'
 
-HISTFILE=~/.zsh_history
+HISTFILE="$HOME/.zsh_history"
 HISTSIZE=5000
 SAVEHIST=5000
 
 export VISUAL=vim
-export GOPATH=$HOME/.go
-export PATH=$PATH:$GOPATH/bin:$HOME/.npm/bin:$HOME/.scripts/:
+export GOPATH="$HOME/.go"
+export PATH="$PATH:$GOPATH/bin:$HOME/.npm/bin:$HOME/.scripts/:"
 export TERM=xterm-256color
 export PROMPT_GEOMETRY_GIT_TIME=false
 

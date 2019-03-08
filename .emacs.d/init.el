@@ -43,10 +43,10 @@
 (require 'use-package)
 
 ;Actual Configs
-(use-package ample-theme
+(use-package zenburn-theme
              :ensure t
              :init
-             (load-theme 'ample t)
+             (load-theme 'zenburn t)
              )
 
 (use-package company
@@ -149,20 +149,7 @@
                    )
              )
 
-(use-package org-bullets
-             :ensure t
-             :after org
-             :config
-             (add-hook 'org-mode-hook 'org-bullets-mode)
-             )
-
 (use-package org-kanban
-             :ensure t
-             :defer t
-             :after org
-             )
-
-(use-package ox-pandoc
              :ensure t
              :defer t
              :after org

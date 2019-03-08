@@ -1,5 +1,5 @@
-alias ..='cd ..'
 alias ...='cd ../..'
+alias ..='cd ..'
 alias G='| rg'
 alias H='| head'
 alias L='| less'
@@ -14,15 +14,16 @@ alias d='dirs -v | head -10'
 alias g=git
 alias ga=forgit::add
 alias gca='git commit --amend --no-edit'
-alias gcsm='git commit -m'
 alias gcf=forgit::restore
 alias gcl='git clone --recurse-submodules'
 alias gco='git checkout'
+alias gcsm='git commit -m'
 alias gd=forgit::diff
 alias gf='git fetch'
 alias glo=forgit::log
 alias gp='git push'
 alias gpf='git push --force-with-lease'
+alias gpl='git pull'
 alias gst='git status'
 alias jn='jupyter notebook &> /dev/null &'
 alias l='ls -lFh'
@@ -34,6 +35,8 @@ alias mv='mv -i'
 alias pro='export http_proxy=http://127.0.0.1:8080;export https_proxy=http://127.0.0.1:8080'
 alias ra=ranger
 alias rm='rm -i'
+alias um='udiskie-mount '
+alias uum='udiskie-umount -d'
 alias v=vim
 alias xc='xclip -sel clip'
 alias ytd='youtube-dl -i --proxy='\''socks5://127.0.0.1:1080/'\'' -o '\''%(title)s.%(ext)s'\'

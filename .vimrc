@@ -5,7 +5,7 @@ filetype off
 
 " Plug Settings{{{
 call plug#begin('~/.vim/plugged')
-Plug 'Chiel92/vim-autoformat'
+Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --gocode-completer --tern-completer --clang-completer --rust-completer' }
 Plug 'easymotion/vim-easymotion'
 Plug 'honza/vim-snippets'
@@ -25,7 +25,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'sirver/ultisnips'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-abolish', { 'on': 'Abolish' }
-Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-dispatch', { 'on': 'Dispatch' }
 Plug 'tpope/vim-surround'
 Plug 'w0ng/vim-hybrid'
 Plug 'w0rp/ale'
@@ -111,10 +111,31 @@ let g:tex_flavor = "latex"
 let g:polyglot_disabled = ["latex"]
 "}}}
 " Lightline{{{
-let g:lightline = {'colorscheme': 'powerline'}
+let g:lightline = {
+            \ 'colorscheme': 'powerline',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ],
+            \             [ 'readonly', 'filename', 'modified'] ],
+            \   'right': [ [ 'lineinfo' ],
+            \              [ 'percent' ],
+            \              [ 'charvaluehex', 'fileformat', 'fileencoding', 'filetype' ] ]
+            \ },
+            \ 'component': {
+            \   'charvaluehex': '0x%B'
+            \ },
+            \ 'component_function': {
+            \ },
+            \ }
 "}}}
 " Limelight {{{
 let g:limelight_default_coefficient = 0.7
+" }}}
+" Netrw {{{
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 10
 " }}}
 " Tagbar{{{
 let g:tagbar_sort = 0
@@ -151,6 +172,7 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+nnoremap <F8> :Vexplore<CR>
 nnoremap <F9> :Dispatch<CR>
 nnoremap <leader>b :Tagbar<CR>
 nnoremap <leader>d :YcmCompleter GoTo<CR>

@@ -135,7 +135,5 @@ exec --no-startup-id dunst
 exec --no-startup-id fcitx
 exec --no-startup-id feh --bg-scale --randomize --no-fehbg $HOME/.wallpapers/*
 exec --no-startup-id firefox
-exec --no-startup-id goldendict
 exec --no-startup-id redshift
-exec --no-startup-id udiskie -ANFs2
 exec --no-startup-id xmodmap $HOME/.Xmodmap
