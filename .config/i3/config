@@ -2,7 +2,7 @@ set $mod Mod4
 font pango:monospace 10
 floating_modifier $mod
 focus_follows_mouse yes
-set $term tilix
+set $term termite
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -113,7 +113,7 @@ client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color       
 
 bindsym $mod+Return exec $term
 bindsym $mod+d exec rofi -show run
-bindsym $mod+e exec LC_CTYPE=zh_CN.UTF-8 emacs
+bindsym $mod+e exec emacs
 bindsym $mod+p exec passmenu -i
 bindsym $mod+g exec goldendict
 bindsym $mod+n exec rofi -show window
@@ -129,7 +129,7 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 5% && notify-send "Brightness
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5%% && notify-send "Brightness Level" "$(xbacklight | cut -d. -f1)%"
 bindsym Print exec flameshot gui
 
-exec --no-startup-id $term
+exec --no-startup-id $term -e tmux
 exec --no-startup-id compton --config $HOME/.config/compton.conf
 exec --no-startup-id dunst
 exec --no-startup-id fcitx

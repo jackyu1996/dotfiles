@@ -149,6 +149,7 @@ let g:tagbar_type_markdown = {
 "}}}
 " Vimtex{{{
 let g:vimtex_view_method = "zathura"
+let g:vimtex_quickfix_mode = 0
 if empty(v:servername) && exists('*remote_startserver')
     call remote_startserver('VIM')
 endif
@@ -193,7 +194,7 @@ autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \ execute "normal! g'\"" |
             \ endif
-autocmd FileType html,css,javascript,vue setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType html,css,javascript,vue,json setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType yaml setlocal noexpandtab
 autocmd BufNewFile,Bufread *.lgr setfiletype ledger
 autocmd! User GoyoEnter Limelight
