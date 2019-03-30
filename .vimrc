@@ -85,6 +85,7 @@ let g:ale_linters = {
             \'cpp': ['clangtidy'],
             \'javascript': ['eslint'],
             \'python':['flake8'],
+            \'tex':['lacheck'],
             \}
 let g:ale_sign_error = '×'
 let g:ale_sign_warning = '·'

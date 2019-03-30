@@ -89,11 +89,11 @@ new_window none
 hide_edge_borders both
 for_window [class="^.*"] border pixel 0
 for_window [window_role="pop-up"] floating enable
+for_window [window_role="pref"] floating enable
 for_window [window_role="task_dialog"] floating enable
 for_window [class="flameshot"] floating enable
 for_window [class="Gimp"] floating enable
 for_window [class="Telegram"] floating enable
-for_window [class="Dukto"] floating enable
 
 gaps inner 10
 gaps outer 0
@@ -101,7 +101,7 @@ smart_gaps on
 
 assign [class="Firefox"] $WS2
 assign [class="mpv"] $WS3
-assign [class="Emacs"] $WS4
+assign [title="emacs -nw"] $WS4
 assign [class="Zeal"] $WS5
 assign [class="GoldenDict"] $WS8
 assign [class="Telegram"] $WS9
@@ -113,7 +113,7 @@ client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color       
 
 bindsym $mod+Return exec $term
 bindsym $mod+d exec rofi -show run
-bindsym $mod+e exec emacs
+bindsym $mod+e exec $term -e "emacs -nw"
 bindsym $mod+p exec passmenu -i
 bindsym $mod+g exec goldendict
 bindsym $mod+n exec rofi -show window

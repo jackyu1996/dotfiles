@@ -71,45 +71,11 @@
                    )
              )
 
-(use-package evil
-             :ensure t
-             :after company
-             :init
-             (setq evil-want-keybinding nil
-                   evil-want-C-u-scroll t
-                   )
-             :config
-             (evil-mode)
-             )
-
-(use-package evil-collection
-             :ensure t
-             :after (evil company)
-             :config
-             (evil-collection-init)
-             )
-
-(use-package evil-org
-             :ensure t
-             :after evil
-             :config
-             (add-hook 'org-mode-hook 'evil-org-mode)
-             (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))
-             (require 'evil-org-agenda)
-             (evil-org-agenda-set-keys)
-             )
-
-(use-package goldendict
-             :ensure t
-             :bind ("C-c g" . goldendict-dwim))
-
 (use-package helm
              :ensure t
              :bind
              (
               ("M-x" . helm-M-x)
-              ("M-f" . helm-find-files)
-              ("M-b" . helm-buffers-list)
               )
              :defer 1
              :config
@@ -141,11 +107,11 @@
                                             "* TODO %? %i\n")
                                            ("j" "Journal" plain (file+olp+datetree "~/Documents/notes/JOURNAL.org")
                                             "     %? %i\n")
-                                           ("h" "Homework" entry (file+headline "~/Documents/notes/TODO.org" "Homework")
-                                            "* TODO %? %i\nSCHEDULED: %^t")
                                            )
                    org-goto-interface 'outline-path-completion
                    org-outline-path-complete-in-steps nil
+                   org-todo-keywords
+                   '((sequence "DOING" "|" "DONE"))
                    )
              )
 
