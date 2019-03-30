@@ -35,6 +35,7 @@ alias mv='mv -i'
 alias pro='export http_proxy=http://127.0.0.1:8080;export https_proxy=http://127.0.0.1:8080'
 alias ra=ranger
 alias rm='rm -i'
+alias rs='rsync -zvhP'
 alias um='udiskie-mount '
 alias uum='udiskie-umount -d'
 alias v=vim
