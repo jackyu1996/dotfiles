@@ -87,13 +87,13 @@ bar {
 
 new_window none
 hide_edge_borders both
+for_window [class="Gimp"] floating enable
+for_window [class="Telegram"] floating enable
 for_window [class="^.*"] border pixel 0
+for_window [class="flameshot"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="pref"] floating enable
 for_window [window_role="task_dialog"] floating enable
-for_window [class="flameshot"] floating enable
-for_window [class="Gimp"] floating enable
-for_window [class="Telegram"] floating enable
 
 gaps inner 10
 gaps outer 0
@@ -125,8 +125,8 @@ bindsym XF86AudioRaiseVolume exec amixer sset Master 5%+ && notify-send "Volume"
 bindsym XF86AudioPrev exec mpc prev && notify-send "Now Playing" "$(mpc current)"
 bindsym XF86AudioNext exec mpc next && notify-send "Now Playing" "$(mpc current)"
 bindsym XF86AudioPlay exec mpc toggle && notify-send "Toggled" "$(mpc status | head -n1)"
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5% && notify-send "Brightness Level" "$(xbacklight | cut -d. -f1)%"
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5%% && notify-send "Brightness Level" "$(xbacklight | cut -d. -f1)%"
+bindsym XF86MonBrightnessDown exec xbacklight -dec 5 && notify-send "Brightness Level" "$(xbacklight -get)%"
+bindsym XF86MonBrightnessUp exec xbacklight -inc 5 && notify-send "Brightness Level" "$(xbacklight -get)%"
 bindsym Print exec flameshot gui
 
 exec --no-startup-id $term -e tmux
@@ -137,3 +137,4 @@ exec --no-startup-id feh --bg-scale --randomize --no-fehbg $HOME/.wallpapers/*
 exec --no-startup-id firefox
 exec --no-startup-id redshift
 exec --no-startup-id xmodmap $HOME/.Xmodmap
+exec --no-startup-id goldendict

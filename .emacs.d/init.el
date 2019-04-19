@@ -19,6 +19,7 @@
 (horizontal-scroll-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(save-place-mode 1)
 (prefer-coding-system 'utf-8)
 (setq-default indent-tabs-mode nil)
 (global-display-line-numbers-mode)
@@ -113,6 +114,7 @@
                    org-todo-keywords
                    '((sequence "DOING" "|" "DONE"))
                    )
+             (add-hook 'org-mode-hook 'org-indent-mode)
              )
 
 (use-package org-kanban
