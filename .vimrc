@@ -21,6 +21,7 @@ Plug 'majutsushi/tagbar', { 'on': 'Tagbar' }
 Plug 'mattn/emmet-vim'
 Plug 'raimondi/delimitmate'
 Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
 Plug 'sirver/ultisnips'
 Plug 'terryma/vim-multiple-cursors'
@@ -174,7 +175,7 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-nnoremap <F8> :Vexplore<CR>
+nnoremap <F8> :NERDTreeToggle<CR>
 nnoremap <F9> :Dispatch<CR>
 nnoremap <leader>b :Tagbar<CR>
 nnoremap <leader>d :YcmCompleter GoTo<CR>

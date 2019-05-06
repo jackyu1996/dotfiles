@@ -87,6 +87,7 @@ bar {
 
 new_window none
 hide_edge_borders both
+for_window [class="Anki"] floating enable
 for_window [class="Gimp"] floating enable
 for_window [class="Telegram"] floating enable
 for_window [class="^.*"] border pixel 0
