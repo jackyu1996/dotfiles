@@ -60,6 +60,7 @@ set nostartofline
 set number
 set omnifunc=syntaxcomplete#Complete
 set pastetoggle=<F12>
+set previewheight=2
 set relativenumber
 set shiftwidth=4
 set showcmd
