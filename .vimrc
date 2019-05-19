@@ -19,6 +19,7 @@ Plug 'lervag/vimtex', { 'for': 'tex' }
 Plug 'ledger/vim-ledger', { 'for': 'ledger' }
 Plug 'majutsushi/tagbar', { 'on': 'Tagbar' }
 Plug 'mattn/emmet-vim'
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'raimondi/delimitmate'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
@@ -72,12 +73,12 @@ set smarttab
 set softtabstop=4
 set splitright
 set tabstop=4
+set termguicolors
 set whichwrap=b,s,h,l,<,>,[,]
 set wildmenu
 set wildmode=list:longest,full
 syntax enable
 syntax on
-set termguicolors
 colorscheme hybrid
 "}}}
 " Ale{{{
@@ -133,13 +134,6 @@ let g:lightline = {
 " Limelight {{{
 let g:limelight_default_coefficient = 0.7
 " }}}
-" Netrw {{{
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 10
-" }}}
 " Tagbar{{{
 let g:tagbar_sort = 0
 let g:tagbar_type_markdown = {
@@ -176,6 +170,8 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+nnoremap <F5> :UndotreeToggle<CR>
+nnoremap <F7> :set scb!<CR>
 nnoremap <F8> :NERDTreeToggle<CR>
 nnoremap <F9> :Dispatch<CR>
 nnoremap <leader>b :Tagbar<CR>
@@ -200,6 +196,7 @@ autocmd BufReadPost *
 autocmd FileType html,css,javascript,vue,json setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType yaml setlocal noexpandtab
 autocmd BufNewFile,Bufread *.lgr setfiletype ledger
+autocmd BufNewFile,Bufread *.md,*.txt Limelight
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
 "}}}

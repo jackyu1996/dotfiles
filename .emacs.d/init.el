@@ -114,7 +114,6 @@
                    org-todo-keywords
                    '((sequence "DOING" "|" "DONE"))
                    )
-             (add-hook 'org-mode-hook 'org-indent-mode)
              )
 
 (use-package org-kanban
