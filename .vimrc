@@ -194,9 +194,8 @@ autocmd BufReadPost *
             \ execute "normal! g'\"" |
             \ endif
 autocmd FileType html,css,javascript,vue,json setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType yaml setlocal noexpandtab
+autocmd FileType yaml,yml setlocal noexpandtab
 autocmd BufNewFile,Bufread *.lgr setfiletype ledger
-autocmd BufNewFile,Bufread *.md,*.txt Limelight
 autocmd BufRead /tmp/mutt-* set tw=72
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!

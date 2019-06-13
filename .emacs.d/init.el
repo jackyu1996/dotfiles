@@ -68,6 +68,8 @@
                                      (agenda . 10)
                                      )
                    show-week-agenda-p t
+                   dashboard-set-footer nil
+                   dashboard-set-init-info nil
                    dashboard-startup-banner 'logo
                    )
              )
