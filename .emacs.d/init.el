@@ -44,14 +44,12 @@
 (require 'use-package)
 
 ;Actual Configs
-(use-package zenburn-theme
-             :ensure t
-             :init
-             (load-theme 'zenburn t)
-             )
-
 (use-package company
              :ensure t
+             :bind
+             (
+              ("M-;" . company-complete)
+              )
              :config
              (global-company-mode)
              (setq company-idle-delay 0.2
@@ -142,3 +140,10 @@
              (which-key-mode)
              (setq which-key-idle-delay 0.2)
              )
+
+(use-package zenburn-theme
+             :ensure t
+             :init
+             (load-theme 'zenburn t)
+             )
+
