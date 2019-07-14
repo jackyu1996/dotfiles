@@ -101,7 +101,7 @@ gaps inner 10
 gaps outer 0
 smart_gaps on
 
-assign [class="Firefox"] $WS2
+assign [class="firefox"] $WS2
 assign [class="mpv"] $WS3
 assign [title="emacs"] $WS4
 assign [class="Zeal"] $WS5

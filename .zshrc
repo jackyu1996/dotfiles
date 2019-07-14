@@ -7,6 +7,7 @@ if ! zgen-saved; then
     zgen load zsh-users/zsh-autosuggestions
     zgen load zsh-users/zsh-completions src
     zgen load marzocchi/zsh-notify
+    zgen load rupa/z z.sh
     zgen load ael-code/zsh-colored-man-pages
 
     zgen save
