@@ -6,17 +6,16 @@ filetype off
 " Plug Settings{{{
 call plug#begin('~/.vim/plugged')
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --gocode-completer --tern-completer --clang-completer --rust-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer --ts-completer --rust-completer' }
+Plug 'chriskempson/base16-vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 Plug 'junegunn/vim-easy-align'
-Plug 'lervag/vimtex', { 'for': 'tex' }
 Plug 'ledger/vim-ledger', { 'for': 'ledger' }
+Plug 'lervag/vimtex', { 'for': 'tex' }
 Plug 'majutsushi/tagbar', { 'on': 'Tagbar' }
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
@@ -25,11 +24,9 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'sheerun/vim-polyglot'
 Plug 'sirver/ultisnips'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-abolish', { 'on': 'Abolish' }
 Plug 'tpope/vim-dispatch', { 'on': 'Dispatch' }
 Plug 'tpope/vim-surround'
-Plug 'w0ng/vim-hybrid'
 Plug 'w0rp/ale'
 call plug#end()
 "}}}
@@ -38,7 +35,6 @@ filetype plugin indent on
 inoremap jk <esc>
 let mapleader = " "
 let maplocalleader = " "
-set autochdir
 set autoindent
 set autoread
 set background=dark
@@ -49,6 +45,7 @@ set conceallevel=1
 set encoding=utf-8
 set expandtab
 set foldenable
+set foldlevelstart=0
 set foldmethod=indent
 set guioptions="a"
 set ignorecase
@@ -79,7 +76,7 @@ set wildmenu
 set wildmode=list:longest,full
 syntax enable
 syntax on
-colorscheme hybrid
+colorscheme base16-classic-dark
 "}}}
 " Ale{{{
 let g:ale_linters = {
@@ -110,10 +107,6 @@ nmap ga <Plug>(EasyAlign)
 " Emmet{{{
 let g:user_emmet_expandabbr_key = '<C-e>'
 "}}}
-" Latex{{{
-let g:tex_flavor = "latex"
-let g:polyglot_disabled = ["latex"]
-"}}}
 " Lightline{{{
 let g:lightline = {
             \ 'colorscheme': 'powerline',
@@ -131,9 +124,6 @@ let g:lightline = {
             \ },
             \ }
 "}}}
-" Limelight {{{
-let g:limelight_default_coefficient = 0.7
-" }}}
 " Tagbar{{{
 let g:tagbar_sort = 0
 let g:tagbar_type_markdown = {
@@ -145,6 +135,8 @@ let g:tagbar_type_markdown = {
             \}
 "}}}
 " Vimtex{{{
+let g:tex_flavor = "latex"
+let g:polyglot_disabled = ["latex"]
 let g:vimtex_view_method = "zathura"
 let g:vimtex_quickfix_mode = 0
 if empty(v:servername) && exists('*remote_startserver')
@@ -178,7 +170,6 @@ nnoremap <leader>b :Tagbar<CR>
 nnoremap <leader>d :YcmCompleter GoTo<CR>
 nnoremap <leader>e :cw<CR>
 nnoremap <leader>f :Autoformat<CR>
-nnoremap <leader>g :Goyo<CR>
 nnoremap <leader>h :set hlsearch!<CR>
 nnoremap <leader>n :Buffers<CR>
 nnoremap <leader>p :Files<CR>
@@ -196,7 +187,4 @@ autocmd BufReadPost *
 autocmd FileType html,css,javascript,vue,json setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType yaml,yml setlocal noexpandtab
 autocmd BufNewFile,Bufread *.lgr setfiletype ledger
-autocmd BufRead /tmp/mutt-* set tw=72
-autocmd! User GoyoEnter Limelight
-autocmd! User GoyoLeave Limelight!
 "}}}
