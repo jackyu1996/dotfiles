@@ -44,11 +44,13 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=5000
 SAVEHIST=5000
 
-export VISUAL=vim
+export GO111MODULE=auto
 export GOPATH="$HOME/.go"
-export PATH="${PATH}:$GOPATH/bin:$HOME/.npm/bin:$HOME/.scripts"
+export PATH="${PATH}:$GOPATH/bin:$HOME/.npm/bin:$HOME/.local/bin"
 export TERM=xterm-256color
+export VISUAL=vim
 
-source ~/.fzf.zsh
+source /usr/share/fzf/completion.zsh
+source /usr/share/fzf/key-bindings.zsh
 source ~/.aliases
 

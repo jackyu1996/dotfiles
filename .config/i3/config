@@ -91,8 +91,6 @@ for_window [class="^.*"] border pixel 0
 for_window [class="Gimp"] floating enable
 for_window [class="Telegram"] floating enable
 for_window [class="Zathura"] floating enable
-for_window [class="flameshot"] floating enable
-for_window [class="fontforge"] floating enable
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="pref"] floating enable
 for_window [window_role="task_dialog"] floating enable
@@ -103,9 +101,6 @@ smart_gaps on
 
 assign [class="firefox"] $WS2
 assign [class="mpv"] $WS3
-assign [title="emacs"] $WS4
-assign [class="Zeal"] $WS5
-assign [class="Anki"] $WS7
 assign [class="GoldenDict"] $WS8
 assign [class="Telegram"] $WS9
 
@@ -116,7 +111,6 @@ client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color       
 
 bindsym $mod+Return exec $term
 bindsym $mod+d exec rofi -show run
-bindsym $mod+e exec emacs
 bindsym $mod+p exec passmenu -i
 bindsym $mod+g exec goldendict
 bindsym $mod+n exec rofi -show window
@@ -130,7 +124,7 @@ bindsym XF86AudioNext exec mpc next && notify-send "Now Playing" "$(mpc current)
 bindsym XF86AudioPlay exec mpc toggle && notify-send "Toggled" "$(mpc status | head -n1)"
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5 && notify-send "Brightness Level" "$(xbacklight -get)%"
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5 && notify-send "Brightness Level" "$(xbacklight -get)%"
-bindsym Print exec flameshot gui
+bindsym Print exec maim -s -m 10 $HOME/Downloads/tmp/$(date +%s).png
 
 exec --no-startup-id $term -e tmux
 exec --no-startup-id compton --config $HOME/.config/compton.conf

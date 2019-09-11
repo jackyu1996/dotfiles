@@ -5,13 +5,13 @@ filetype off
 
 " Plug Settings{{{
 call plug#begin('~/.vim/plugged')
+Plug '/usr/bin/fzf'
 Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --go-completer --ts-completer --rust-completer' }
-Plug 'chriskempson/base16-vim'
+Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'ledger/vim-ledger', { 'for': 'ledger' }
@@ -27,7 +27,7 @@ Plug 'sirver/ultisnips'
 Plug 'tpope/vim-abolish', { 'on': 'Abolish' }
 Plug 'tpope/vim-dispatch', { 'on': 'Dispatch' }
 Plug 'tpope/vim-surround'
-Plug 'w0rp/ale'
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --go-completer --ts-completer --rust-completer' }
 call plug#end()
 "}}}
 " Basic Settings{{{
@@ -40,7 +40,8 @@ set autoread
 set background=dark
 set backspace=indent,eol,start
 set clipboard=unnamedplus
-set completeopt=longest,menuone,preview
+set completeopt=longest,menuone,popup
+set completepopup=border:off
 set conceallevel=1
 set encoding=utf-8
 set expandtab
@@ -48,6 +49,7 @@ set foldenable
 set foldlevelstart=0
 set foldmethod=indent
 set guioptions="a"
+set hidden
 set ignorecase
 set incsearch
 set laststatus=2
@@ -58,7 +60,6 @@ set nostartofline
 set number
 set omnifunc=syntaxcomplete#Complete
 set pastetoggle=<F12>
-set previewheight=2
 set relativenumber
 set shiftwidth=4
 set showcmd
@@ -76,16 +77,16 @@ set wildmenu
 set wildmode=list:longest,full
 syntax enable
 syntax on
-colorscheme base16-classic-dark
+colorscheme onedark
 "}}}
 " Ale{{{
 let g:ale_linters = {
-            \'bash': ['shellcheck'],
-            \'c': ['clangtidy'],
-            \'cpp': ['clangtidy'],
+            \'bash':       ['shellcheck'],
+            \'c':          ['clangtidy'],
+            \'cpp':        ['clangtidy'],
             \'javascript': ['eslint'],
-            \'python':['flake8'],
-            \'tex':['lacheck'],
+            \'python':     ['flake8'],
+            \'tex':        ['lacheck'],
             \}
 let g:ale_sign_error = '×'
 let g:ale_sign_warning = '·'
@@ -94,6 +95,7 @@ let g:ale_set_locllist = 0
 "}}}
 " Autoformat{{{
 let g:formatters_javascript = ['eslint_local']
+let g:formatters_python= ['black']
 "}}}
 " DelimitMate{{{
 let delimitMate_balance_matchpairs = 1
@@ -109,7 +111,7 @@ let g:user_emmet_expandabbr_key = '<C-e>'
 "}}}
 " Lightline{{{
 let g:lightline = {
-            \ 'colorscheme': 'powerline',
+            \ 'colorscheme': 'onedark',
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
             \             [ 'readonly', 'filename', 'modified'] ],
@@ -148,7 +150,7 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tag_files = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_min_num_of_chars_for_completion = 99
+let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
@@ -184,7 +186,7 @@ autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \ execute "normal! g'\"" |
             \ endif
-autocmd FileType html,css,javascript,vue,json setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType html,css,javascript,vue,json,xml,markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType yaml,yml setlocal noexpandtab
 autocmd BufNewFile,Bufread *.lgr setfiletype ledger
 "}}}

@@ -53,7 +53,7 @@ rofi.display-run:            WHAT YOU WANT?
 rofi.display-window:         GO TO
 rofi.fake-transparency:      true
 rofi.fake-background:        background
-rofi.window-format:          {w} {t}
+rofi.window-format:          {t}
 rofi.theme:                  dmenu
 rofi.combi-hide-mode-prefix: true
 
