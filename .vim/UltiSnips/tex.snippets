@@ -3,7 +3,7 @@ snippet tp "title page" b
     \vspace*{10em}
     \begin{center}
         {\huge $1}
-		\vspace{\stretch{4}}
+        \vspace{\stretch{4}}
         \begin{table}[htpb]
             \centering
             \begin{tabular}{rc}
@@ -13,7 +13,7 @@ snippet tp "title page" b
             \end{tabular}
         \end{table}
     \end{center}
-	\vspace{\stretch{2}}
+    \vspace{\stretch{2}}
 \end{titlepage}
 endsnippet
 
@@ -23,4 +23,24 @@ endsnippet
 
 snippet a4 "A4 for article" b
 \documentclass[a4paper]{article}
+endsnippet
+
+snippet fra "Use this Frame" b
+\begin{frame}[c]
+    \frametitle{$1}
+    $2
+\end{frame}
+
+endsnippet
+
+snippet uls "Underlined space"
+$\rule{1cm}{0.15mm}$
+endsnippet
+
+snippet onoh "Reveal but not on handout" i
+\only<${1:${VISUAL:2}}| handout:0>{$2}
+endsnippet
+
+snippet anoh "Alert but not on handout" i
+\alert<${1:${VISUAL:2}}| handout:0>{$2}
 endsnippet

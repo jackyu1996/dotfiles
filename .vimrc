@@ -6,7 +6,8 @@ filetype off
 " Plug Settings{{{
 call plug#begin('~/.vim/plugged')
 Plug '/usr/bin/fzf'
-Plug 'Chiel92/vim-autoformat', { 'on': 'Autoformat' }
+Plug 'airblade/vim-gitgutter'
+Plug 'Chiel92/vim-autoformat'
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'honza/vim-snippets'
@@ -21,11 +22,12 @@ Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'raimondi/delimitmate'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'sheerun/vim-polyglot'
 Plug 'sirver/ultisnips'
-Plug 'tpope/vim-abolish', { 'on': 'Abolish' }
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-dispatch', { 'on': 'Dispatch' }
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer --go-completer --ts-completer --rust-completer' }
 call plug#end()
@@ -35,6 +37,8 @@ filetype plugin indent on
 inoremap jk <esc>
 let mapleader = " "
 let maplocalleader = " "
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set autoindent
 set autoread
 set background=dark
@@ -72,6 +76,7 @@ set softtabstop=4
 set splitright
 set tabstop=4
 set termguicolors
+set virtualedit=block
 set whichwrap=b,s,h,l,<,>,[,]
 set wildmenu
 set wildmode=list:longest,full
@@ -84,6 +89,7 @@ let g:ale_linters = {
             \'bash':       ['shellcheck'],
             \'c':          ['clangtidy'],
             \'cpp':        ['clangtidy'],
+            \'go':         ['gobuild'],
             \'javascript': ['eslint'],
             \'python':     ['flake8'],
             \'tex':        ['lacheck'],
@@ -126,6 +132,9 @@ let g:lightline = {
             \ },
             \ }
 "}}}
+" Polyglot{{{
+let g:polyglot_disabled = ['latex']
+" }}}
 " Tagbar{{{
 let g:tagbar_sort = 0
 let g:tagbar_type_markdown = {
@@ -138,7 +147,6 @@ let g:tagbar_type_markdown = {
 "}}}
 " Vimtex{{{
 let g:tex_flavor = "latex"
-let g:polyglot_disabled = ["latex"]
 let g:vimtex_view_method = "zathura"
 let g:vimtex_quickfix_mode = 0
 if empty(v:servername) && exists('*remote_startserver')
@@ -149,7 +157,6 @@ endif
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tag_files = 1
 let g:ycm_complete_in_comments = 1
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
@@ -165,9 +172,9 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 nnoremap <F5> :UndotreeToggle<CR>
-nnoremap <F7> :set scb!<CR>
+nnoremap <F7> :set scrollbind!<CR>
 nnoremap <F8> :NERDTreeToggle<CR>
-nnoremap <F9> :Dispatch<CR>
+nnoremap <F9> :Dispatch
 nnoremap <leader>b :Tagbar<CR>
 nnoremap <leader>d :YcmCompleter GoTo<CR>
 nnoremap <leader>e :cw<CR>
@@ -187,6 +194,7 @@ autocmd BufReadPost *
             \ execute "normal! g'\"" |
             \ endif
 autocmd FileType html,css,javascript,vue,json,xml,markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType markdown,text,tex setlocal linebreak
 autocmd FileType yaml,yml setlocal noexpandtab
 autocmd BufNewFile,Bufread *.lgr setfiletype ledger
 "}}}
