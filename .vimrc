@@ -133,7 +133,7 @@ let g:lightline = {
             \ }
 "}}}
 " Polyglot{{{
-let g:polyglot_disabled = ['latex']
+" let g:polyglot_disabled = ['latex']
 " }}}
 " Tagbar{{{
 let g:tagbar_sort = 0

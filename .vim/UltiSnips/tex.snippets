@@ -33,14 +33,21 @@ snippet fra "Use this Frame" b
 
 endsnippet
 
-snippet uls "Underlined space"
-$\rule{1cm}{0.15mm}$
-endsnippet
-
 snippet onoh "Reveal but not on handout" i
 \only<${1:${VISUAL:2}}| handout:0>{$2}
 endsnippet
 
 snippet anoh "Alert but not on handout" i
 \alert<${1:${VISUAL:2}}| handout:0>{$2}
+endsnippet
+
+snippet bfi "Figure in beamer"
+\begin{figure}[htpb]
+\centering
+\includegraphics[height=0.8\textheight]{${1}}
+\end{figure}
+endsnippet
+
+snippet bfl "Fill in in beamer"
+\alt<${1:${VISUAL:2}}>{\uline{\hspace{2em}$2\hspace{2em}}}{\uline{\hspace{2em}$3\hspace{2em}}}
 endsnippet
