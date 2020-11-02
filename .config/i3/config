@@ -89,6 +89,7 @@ new_window none
 hide_edge_borders both
 for_window [class="^.*"] border pixel 0
 for_window [class="Anki"] floating enable
+for_window [class="flameshot"] floating enable
 for_window [class="Gimp"] floating enable
 for_window [class="idea"] floating enable
 for_window [class="Telegram"] floating enable
@@ -124,9 +125,6 @@ bindsym $mod+Shift+x exec env XSECURELOCK_NO_COMPOSITE=1 XSECURELOCK_PASSWORD_PR
 bindsym XF86AudioMute exec amixer sset Master toggle && notify-send "Volume" "Muted"
 bindsym XF86AudioLowerVolume exec amixer sset Master 5%- && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
 bindsym XF86AudioRaiseVolume exec amixer sset Master 5%+ && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
-bindsym XF86AudioPrev exec mpc prev && notify-send "Now Playing" "$(mpc current)"
-bindsym XF86AudioNext exec mpc next && notify-send "Now Playing" "$(mpc current)"
-bindsym XF86AudioPlay exec mpc toggle && notify-send "Toggled" "$(mpc status | head -n1)"
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5 && notify-send "Brightness Level" "$(xbacklight -get)%"
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5 && notify-send "Brightness Level" "$(xbacklight -get)%"
 bindsym Print exec maim -s -m 10 $HOME/Downloads/tmp/$(date +%s).png

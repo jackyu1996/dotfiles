@@ -24,7 +24,6 @@ zstyle ':completion:*' list-colors ''
 zstyle ':notify:*' error-title "WHAT!!!"
 zstyle ':notify:*' success-title "Meh"
 zstyle ':notify:*' activate-terminal yes
-zstyle ':notify:*' command-complete-timeout 5
 
 zle -N edit-command-line
 autoload -Uz edit-command-line
