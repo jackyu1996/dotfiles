@@ -115,6 +115,9 @@ nmap ga <Plug>(EasyAlign)
 " Emmet{{{
 let g:user_emmet_expandabbr_key = '<C-e>'
 "}}}
+" FZF{{{
+let g:fzf_layout = { 'down': '30%' }
+"}}}
 " Lightline{{{
 let g:lightline = {
             \ 'colorscheme': 'onedark',

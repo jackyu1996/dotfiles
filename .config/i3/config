@@ -2,7 +2,7 @@ set $mod Mod4
 font pango:monospace 11
 floating_modifier $mod
 focus_follows_mouse yes
-set $term termite
+set $term alacritty
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -122,9 +122,9 @@ bindsym $mod+g exec goldendict
 bindsym $mod+n exec rofi -show window
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+x exec env XSECURELOCK_NO_COMPOSITE=1 XSECURELOCK_PASSWORD_PROMPT=emoticon XSECURELOCK_SHOW_HOSTNAME=0 xsecurelock
-bindsym XF86AudioMute exec amixer sset Master toggle && notify-send "Volume" "Muted"
-bindsym XF86AudioLowerVolume exec amixer sset Master 5%- && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
-bindsym XF86AudioRaiseVolume exec amixer sset Master 5%+ && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
+bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle && notify-send "Sound" "$(amixer sget Master | grep -E -o -m 1 '\[(off|on)\]')"
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5% && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5% && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5 && notify-send "Brightness Level" "$(xbacklight -get)%"
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5 && notify-send "Brightness Level" "$(xbacklight -get)%"
 bindsym Print exec maim -s -m 10 $HOME/Downloads/tmp/$(date +%s).png
@@ -138,3 +138,4 @@ exec --no-startup-id firefox
 exec --no-startup-id redshift
 exec --no-startup-id xmodmap $HOME/.Xmodmap
 exec --no-startup-id goldendict
+exec --no-startup-id imwheel
