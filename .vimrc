@@ -7,6 +7,7 @@ filetype off
 call plug#begin('~/.vim/plugged')
 Plug '/usr/bin/fzf'
 Plug 'airblade/vim-gitgutter'
+Plug 'ap/vim-css-color'
 Plug 'Chiel92/vim-autoformat'
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
@@ -73,6 +74,7 @@ set smartcase
 set smartindent
 set smarttab
 set softtabstop=4
+set spell
 set splitright
 set tabstop=4
 set termguicolors
@@ -100,7 +102,7 @@ let g:ale_set_quickfix = 1
 let g:ale_set_locllist = 0
 "}}}
 " Autoformat{{{
-let g:formatters_javascript = ['eslint_local']
+let g:formatters_javascript = ['eslint_local', 'prettier' ]
 let g:formatters_python= ['black']
 "}}}
 " DelimitMate{{{
@@ -117,6 +119,7 @@ let g:user_emmet_expandabbr_key = '<C-e>'
 "}}}
 " FZF{{{
 let g:fzf_layout = { 'down': '30%' }
+command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 "}}}
 " Lightline{{{
 let g:lightline = {
@@ -133,6 +136,10 @@ let g:lightline = {
             \ },
             \ 'component_function': {
             \ },
+            \ }
+let g:lightline.tabline = {
+            \ 'left': [ [ 'tabs' ] ],
+            \ 'right': [[  ]],
             \ }
 "}}}
 " Polyglot{{{
@@ -177,27 +184,28 @@ nnoremap <C-l> <C-w>l
 nnoremap <F5> :UndotreeToggle<CR>
 nnoremap <F7> :set scrollbind!<CR>
 nnoremap <F8> :NERDTreeToggle<CR>
-nnoremap <F9> :Dispatch
+nnoremap <F9> :Dispatch<Space>
+nnoremap <F11> :terminal<CR>
 nnoremap <leader>b :Tagbar<CR>
 nnoremap <leader>d :YcmCompleter GoTo<CR>
-nnoremap <leader>e :cw<CR>
+nnoremap <leader>c :YcmCompleter RefactorRename<Space>
+nnoremap <leader>e :cwindow<CR>
 nnoremap <leader>f :Autoformat<CR>
 nnoremap <leader>h :set hlsearch!<CR>
 nnoremap <leader>n :Buffers<CR>
 nnoremap <leader>p :Files<CR>
-nnoremap <leader>q :q!<CR>
+nnoremap <leader>q :quit!<CR>
 nnoremap <leader>r :Rg<CR>
-nnoremap <leader>s :set spell!<CR>
-nnoremap <leader>w :w<CR>
-nnoremap <leader>x :qa!<CR>
+nnoremap <leader>w :write<CR>
+nnoremap <leader>x :quitall!<CR>
 "}}}
 " Some Autocmd{{{
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \ execute "normal! g'\"" |
             \ endif
-autocmd FileType html,css,javascript,vue,json,xml,markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType html,css,javascript,json,xml,markdown,yaml,yml
+            \ setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType markdown,text,tex setlocal linebreak
-autocmd FileType yaml,yml setlocal noexpandtab
 autocmd BufNewFile,Bufread *.lgr setfiletype ledger
 "}}}

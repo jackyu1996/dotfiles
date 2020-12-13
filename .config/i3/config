@@ -132,7 +132,7 @@ bindsym Print exec maim -s -m 10 $HOME/Downloads/tmp/$(date +%s).png
 exec --no-startup-id $term -e tmux
 exec --no-startup-id picom --experimental-backends --config $HOME/.config/picom.conf
 exec --no-startup-id dunst
-exec --no-startup-id fcitx
+exec --no-startup-id fcitx5
 exec --no-startup-id feh --bg-scale --randomize --no-fehbg $HOME/.wallpapers/*
 exec --no-startup-id firefox
 exec --no-startup-id redshift

@@ -39,14 +39,9 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t-_"
   save_to_clipboard: true
 
-shell:
-  program: /bin/zsh
-  #args:
-    #- --login
-
 key_bindings:
   - { key: Return,    mods: Control|Shift,       action: SpawnNewInstance }
 
 debug:
-  log_level: None
+  log_level: OFF
 
