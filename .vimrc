@@ -16,7 +16,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
-Plug 'ledger/vim-ledger', { 'for': 'ledger' }
 Plug 'lervag/vimtex', { 'for': 'tex' }
 Plug 'majutsushi/tagbar', { 'on': 'Tagbar' }
 Plug 'mattn/emmet-vim'
@@ -45,7 +44,7 @@ set autoread
 set background=dark
 set backspace=indent,eol,start
 set clipboard=unnamedplus
-set completeopt=longest,menuone,popup
+set completeopt=longest,menuone,popup,noinsert,noselect
 set completepopup=border:off
 set conceallevel=1
 set encoding=utf-8
@@ -67,6 +66,7 @@ set omnifunc=syntaxcomplete#Complete
 set pastetoggle=<F12>
 set relativenumber
 set shiftwidth=4
+set shiftround
 set showcmd
 set showmatch
 set showmode
@@ -88,21 +88,21 @@ colorscheme onedark
 "}}}
 " Ale{{{
 let g:ale_linters = {
-            \'bash':       ['shellcheck'],
-            \'c':          ['clangtidy'],
-            \'cpp':        ['clangtidy'],
-            \'go':         ['gobuild'],
-            \'javascript': ['eslint'],
-            \'python':     ['flake8'],
-            \'tex':        ['lacheck'],
-            \}
+            \ 'bash':       ['shellcheck'],
+            \ 'c':          ['clangtidy'],
+            \ 'cpp':        ['clangtidy'],
+            \ 'go':         ['gobuild'],
+            \ 'javascript': ['eslint'],
+            \ 'python':     ['flake8'],
+            \ 'tex':        ['lacheck'],
+            \ }
 let g:ale_sign_error = '×'
 let g:ale_sign_warning = '·'
 let g:ale_set_quickfix = 1
 let g:ale_set_locllist = 0
 "}}}
 " Autoformat{{{
-let g:formatters_javascript = ['eslint_local', 'prettier' ]
+let g:formatters_javascript = [ 'eslint_local' ]
 let g:formatters_python= ['black']
 "}}}
 " DelimitMate{{{
@@ -152,8 +152,8 @@ let g:tagbar_type_markdown = {
             \ 'c:H1',
             \ 's:H2',
             \ 'S:H3'
-            \]
-            \}
+            \ ]
+            \ }
 "}}}
 " Vimtex{{{
 let g:tex_flavor = "latex"
@@ -167,12 +167,18 @@ endif
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tag_files = 1
 let g:ycm_complete_in_comments = 1
-let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_show_diagnostics_ui = 0
+let g:ycm_language_server = [
+            \   {
+            \     'name': 'svelte',
+            \     'cmdline': ['svelteserver', '--stdio'],
+            \     'filetypes': ['svelte']
+            \   },
+            \ ]
 "}}}
 " Mappings{{{
 cnoremap <C-n> <down>
@@ -207,5 +213,4 @@ autocmd BufReadPost *
 autocmd FileType html,css,javascript,json,xml,markdown,yaml,yml
             \ setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType markdown,text,tex setlocal linebreak
-autocmd BufNewFile,Bufread *.lgr setfiletype ledger
 "}}}

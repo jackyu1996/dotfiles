@@ -4,11 +4,11 @@ if ! zgen-saved; then
     zgen load ael-code/zsh-colored-man-pages
     zgen load mafredri/zsh-async async.zsh
     zgen load marzocchi/zsh-notify
-    zgen load RobSis/zsh-completion-generator
     zgen load sindresorhus/pure pure.zsh
     zgen load zdharma/fast-syntax-highlighting
     zgen load zsh-users/zsh-autosuggestions
     zgen load zsh-users/zsh-completions src
+    zgen load agkozak/zsh-z
 
     zgen save
 fi
@@ -38,10 +38,11 @@ bindkey '^w' backward-kill-word
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
-setopt auto_pushd
-setopt pushd_ignore_dups
-setopt pushdminus
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHDMINUS
 setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
 
 WORDCHARS='*?-[]~=&;!#$%^(){}<>_'
 
@@ -49,16 +50,22 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=5000
 SAVEHIST=5000
 
-export FZF_DEFAULT_COMMAND='fd -L --type f --type d'
+export FZF_DEFAULT_COMMAND="fd -L --type f --type d"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-export GO111MODULE=auto
+export GO111MODULE=on
+export PIPENV_PYPI_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
+export GOPROXY="https://goproxy.cn,direct"
 export GOPATH="$HOME/.go"
-export PATH="${PATH}:$GOPATH/bin:$HOME/.npm/bin:$HOME/.local/bin"
+export PUB_HOSTED_URL="https://pub.flutter-io.cn"
+export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
+export ANDROID_SDK_ROOT="$HOME/.android/sdk/"
+export PATH="${PATH}:$GOPATH/bin:/opt/flutter/bin:$HOME/.npm/bin:$HOME/.local/bin"
 export VISUAL=vim
 
+eval $(thefuck --alias)
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
-source /usr/share/z.lua/z.lua.plugin.zsh
 source ~/.aliases
+source ~/.functions
 
