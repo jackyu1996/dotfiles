@@ -144,6 +144,7 @@ let g:lightline.tabline = {
 "}}}
 " Polyglot{{{
 " let g:polyglot_disabled = ['latex']
+let g:vim_svelte_plugin_use_typescript = 1
 " }}}
 " Tagbar{{{
 let g:tagbar_sort = 0
