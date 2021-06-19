@@ -1,6 +1,8 @@
 patch:
   schema_list:
     - schema: double_pinyin_flypy
+    - schema: luna_pinyin
+    - schema: luna_pinyin_tw
 
   switcher:
     hotkeys:
