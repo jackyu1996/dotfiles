@@ -120,6 +120,7 @@ bindsym $mod+e exec emacs
 bindsym $mod+p exec passmenu -i
 bindsym $mod+g exec goldendict
 bindsym $mod+n exec rofi -show window
+bindsym $mod+Shift+n exec dunstctl close-all
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+x exec env XSECURELOCK_NO_COMPOSITE=1 XSECURELOCK_PASSWORD_PROMPT=emoticon XSECURELOCK_SHOW_HOSTNAME=0 xsecurelock
 bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle && notify-send "Sound" "$(amixer sget Master | grep -E -o -m 1 '\[(off|on)\]')"
@@ -133,7 +134,7 @@ exec --no-startup-id $term -e tmux
 exec --no-startup-id fcitx5
 exec --no-startup-id dunst
 exec --no-startup-id feh --bg-scale --randomize --no-fehbg $HOME/.wallpapers/*
-exec --no-startup-id firefox
+exec --no-startup-id firefox --private-window
 exec --no-startup-id goldendict
 exec --no-startup-id imwheel
 exec --no-startup-id picom --experimental-backends --config $HOME/.config/picom.conf

@@ -4,7 +4,7 @@ IFS=$'\n\t'
 
 echo "Now linking symbolic configs"
 exclude=".git|$(basename "$0")"
-all=$(tree -aif --matchdirs -I "$exclude")
+all=$(tree -aif --matchdirs -I "$exclude" --noreport)
 
 for conf in $all ; do
     if [[ -d $conf ]]; then

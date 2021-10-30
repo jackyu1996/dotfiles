@@ -11,6 +11,7 @@ Plug 'ap/vim-css-color'
 Plug 'Chiel92/vim-autoformat'
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
+Plug 'editorconfig/editorconfig-vim'
 Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 Plug 'joshdick/onedark.vim'
@@ -93,6 +94,7 @@ let g:ale_linters = {
             \ 'cpp':        ['clangtidy'],
             \ 'go':         ['gobuild'],
             \ 'javascript': ['eslint'],
+            \ 'typescirpt': ['eslint'],
             \ 'python':     ['flake8'],
             \ 'tex':        ['lacheck'],
             \ }
@@ -102,7 +104,6 @@ let g:ale_set_quickfix = 1
 let g:ale_set_locllist = 0
 "}}}
 " Autoformat{{{
-let g:formatters_javascript = [ 'eslint_local' ]
 let g:formatters_python= ['black']
 "}}}
 " DelimitMate{{{
@@ -211,7 +212,7 @@ autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
             \ execute "normal! g'\"" |
             \ endif
-autocmd FileType html,css,javascript,json,xml,markdown,yaml,yml
+autocmd FileType html,css,javascript,json,xml,markdown,yaml,yml,svelte
             \ setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType markdown,text,tex setlocal linebreak
 "}}}
