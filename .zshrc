@@ -4,8 +4,8 @@ if ! zgen-saved; then
     zgen load ael-code/zsh-colored-man-pages
     zgen load mafredri/zsh-async async.zsh
     zgen load marzocchi/zsh-notify
-    zgen load sindresorhus/pure pure.zsh
-    zgen load zdharma/fast-syntax-highlighting
+    zgen load sindresorhus/pure pure.zsh main
+    zgen load zdharma-continuum/fast-syntax-highlighting
     zgen load zsh-users/zsh-autosuggestions
     zgen load zsh-users/zsh-completions src
     zgen load agkozak/zsh-z
@@ -60,10 +60,10 @@ export GOPATH="$HOME/.go"
 export PUB_HOSTED_URL="https://pub.flutter-io.cn"
 export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
 export ANDROID_SDK_ROOT="$HOME/.android/sdk/"
-export PATH="${PATH}:$GOPATH/bin:/opt/flutter/bin:$HOME/.npm/bin:$HOME/.local/bin"
+export PATH="${PATH}:/opt/flutter/bin:$HOME/.local/bin"
 export VISUAL=vim
+export NVM_DIR="$HOME/.nvm"
 
-eval $(thefuck --alias)
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
 source ~/.aliases

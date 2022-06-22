@@ -140,3 +140,4 @@ exec --no-startup-id imwheel
 exec --no-startup-id picom --experimental-backends --config $HOME/.config/picom.conf
 exec --no-startup-id redshift
 exec --no-startup-id xmodmap $HOME/.Xmodmap
+exec --no-startup-id workrave
