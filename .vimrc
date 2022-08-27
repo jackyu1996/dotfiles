@@ -91,7 +91,7 @@ let g:ale_linters = {
             \ 'bash':       ['shellcheck'],
             \ 'c':          ['clangtidy'],
             \ 'cpp':        ['clangtidy'],
-            \ 'go':         ['gobuild'],
+            \ 'go':         ['gopls'],
             \ 'javascript': ['eslint'],
             \ 'typescirpt': ['eslint'],
             \ 'python':     ['flake8'],

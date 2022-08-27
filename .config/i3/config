@@ -137,7 +137,7 @@ exec --no-startup-id feh --bg-scale --randomize --no-fehbg $HOME/.wallpapers/*
 exec --no-startup-id firefox --private-window
 exec --no-startup-id goldendict
 exec --no-startup-id imwheel
-exec --no-startup-id picom --experimental-backends --config $HOME/.config/picom.conf
+exec --no-startup-id picom --config $HOME/.config/picom.conf
 exec --no-startup-id redshift
 exec --no-startup-id xmodmap $HOME/.Xmodmap
-exec --no-startup-id workrave
+exec --no-startup-id safeeyes

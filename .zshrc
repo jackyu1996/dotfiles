@@ -54,9 +54,9 @@ export FZF_DEFAULT_COMMAND="fd -L --type f --type d"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export GO111MODULE=on
-export PIPENV_PYPI_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
 export GOPROXY="https://goproxy.cn,direct"
 export GOPATH="$HOME/.go"
+export PIPENV_PYPI_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
 export PUB_HOSTED_URL="https://pub.flutter-io.cn"
 export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
 export ANDROID_SDK_ROOT="$HOME/.android/sdk/"
