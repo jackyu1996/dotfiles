@@ -69,7 +69,7 @@ set shiftwidth=4
 set shiftround
 set showcmd
 set showmatch
-set showmode
+set noshowmode
 set smartcase
 set smartindent
 set smarttab
