@@ -27,6 +27,7 @@ map("n", "<C-j>", "<C-w>j", mapping_opts)
 map("n", "<C-k>", "<C-w>k", mapping_opts)
 map("n", "<C-l>", "<C-w>l", mapping_opts)
 map("n", "<F11>", ":terminal<CR>", mapping_opts)
+map("n", "<leader>b", ":SymbolsOutline<CR>", mapping_opts)
 map("n", "<leader>e", ":TroubleToggle<CR>", mapping_opts)
 map("n", "<leader>h", ":set hlsearch!<CR>", mapping_opts)
 map("n", "<leader>q", ":quit!<CR>", mapping_opts)
@@ -37,18 +38,6 @@ map("n", "<leader>p", ":Telescope find_files<CR>", mapping_opts)
 map("n", "<leader>r", ":Telescope live_grep<CR>", mapping_opts)
 map("n", "<leader>n", ":Telescope buffers<CR>", mapping_opts)
 map("n", "<leader>k", ":Telescope keymaps<CR>", mapping_opts)
-map("", "f",
-    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
-    , {})
-map("", "F",
-    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>"
-    , {})
-map("", "t",
-    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })<cr>"
-    , {})
-map("", "T",
-    "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })<cr>"
-    , {})
 
 opt.autoindent = true
 opt.autoread = true
@@ -62,7 +51,7 @@ opt.expandtab = true
 opt.foldenable = true
 opt.foldlevelstart = 0
 opt.foldmethod = "indent"
-opt.hlsearch = true
+opt.hlsearch = false
 opt.ignorecase = true
 opt.incsearch = true
 opt.lazyredraw = true
@@ -94,7 +83,6 @@ require("packer").startup(function(use)
 
     use {
         "nvim-treesitter/nvim-treesitter",
-        run = ":TSUpdate",
         config = function()
             require("nvim-treesitter.configs").setup {
                 ensure_installed = { "c", "lua", "python", "go", "rust" },
@@ -147,13 +135,13 @@ require("packer").startup(function(use)
                 local bufopts = { noremap = true, silent = true, buffer = bufnr }
                 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
                 vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
-                vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+                vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
                 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
+                vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
                 vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
                 vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
                 vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, bufopts)
                 vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
-                vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
                 vim.keymap.set("n", "<space>f", vim.lsp.buf.formatting, bufopts)
             end
 
@@ -162,7 +150,8 @@ require("packer").startup(function(use)
 
             local servers =
             { "bashls", "clangd", "cmake", "cssls", "dartls", "denols", "emmet_ls", "eslint", "gopls", "html", "jdtls",
-                "jedi_language_server", "jsonls", "rust_analyzer", "sumneko_lua", "svelte", "tailwindcss", "tsserver" }
+                "jedi_language_server", "jsonls", "rust_analyzer", "sumneko_lua", "svelte", "tailwindcss", "tsserver",
+                "marksman" }
 
 
             for _, server in ipairs(servers) do
@@ -221,26 +210,6 @@ require("packer").startup(function(use)
                     ["<C-Space>"] = cmp.mapping.complete(),
                     ["<C-e>"] = cmp.mapping.abort(),
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
-                    ["<Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
-                        elseif has_words_before() then
-                            cmp.complete()
-                        else
-                            fallback()
-                        end
-                    end, { "i", "s" }),
-                    ["<S-Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.jumpable(-1) then
-                            luasnip.jump(-1)
-                        else
-                            fallback()
-                        end
-                    end, { "i", "s" }),
                 }),
                 sources = cmp.config.sources({
                     { name = "nvim_lsp" },
@@ -356,9 +325,9 @@ require("packer").startup(function(use)
     }
 
     use {
-        "phaazon/hop.nvim",
+        "ggandor/leap.nvim",
         config = function()
-            require("hop").setup {}
+            require("leap").set_default_keymaps {}
         end
     }
 
@@ -375,6 +344,13 @@ require("packer").startup(function(use)
                 show_current_context = true,
                 show_current_context_start = true,
             }
+        end
+    }
+
+    use {
+        "simrat39/symbols-outline.nvim",
+        config = function()
+            require("symbols-outline").setup {}
         end
     }
 
@@ -400,4 +376,3 @@ require("packer").startup(function(use)
         end
     }
 end)
-

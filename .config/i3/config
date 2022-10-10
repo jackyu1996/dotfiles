@@ -103,7 +103,7 @@ smart_gaps on
 
 assign [class="firefox"] $WS2
 assign [class="mpv"] $WS3
-assign [class="Emacs"] $WS4
+assign [class="neovide"] $WS4
 assign [class="Zeal"] $WS6
 assign [class="jetbrains-idea-ce"] $WS7
 assign [class="GoldenDict"] $WS8
@@ -116,7 +116,7 @@ client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color       
 
 bindsym $mod+Return exec $term
 bindsym $mod+d exec rofi -show run
-bindsym $mod+e exec emacs
+bindsym $mod+v exec neovide
 bindsym $mod+p exec passmenu -i
 bindsym $mod+g exec goldendict
 bindsym $mod+n exec rofi -show window
