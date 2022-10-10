@@ -17,6 +17,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'lervag/vimtex', { 'for': 'tex' }
+Plug 'ledger/vim-ledger', { 'for': 'ledget' }
 Plug 'majutsushi/tagbar', { 'on': 'Tagbar' }
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
@@ -180,6 +181,9 @@ let g:ycm_language_server = [
             \     'filetypes': ['svelte']
             \   },
             \ ]
+if exists('g:ycm_filetype_blacklist')
+    call extend(g:ycm_filetype_blacklist, { 'ledger': 1 })
+endif
 "}}}
 " Mappings{{{
 cnoremap <C-n> <down>
@@ -193,7 +197,7 @@ nnoremap <F7> :set scrollbind!<CR>
 nnoremap <F8> :NERDTreeToggle<CR>
 nnoremap <F9> :Dispatch<Space>
 nnoremap <F11> :terminal<CR>
-nnoremap <leader>b :TagbarToggle<CR>
+nnoremap <leader>b :Tagbar<CR>
 nnoremap <leader>d :YcmCompleter GoTo<CR>
 nnoremap <leader>c :YcmCompleter RefactorRename<Space>
 nnoremap <leader>e :cwindow<CR>
@@ -213,6 +217,9 @@ let g:netrw_liststyle = 3
 let g:netrw_browse_split = 0
 let g:netrw_winsize = 25
 " }}}
+" Ledger{{{
+let g:ledger_extra_options = '--pedantic --explicit --check-payees'
+" }}}
 " Some Autocmd{{{
 autocmd BufReadPost *
             \ if line("'\"") > 1 && line("'\"") <= line("$") |
@@ -221,5 +228,4 @@ autocmd BufReadPost *
 autocmd FileType html,css,javascript,json,xml,markdown,yaml,yml,svelte
             \ setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
 autocmd FileType markdown,text,tex setlocal linebreak
-autocmd VimEnter * :Tagbar
 "}}}
