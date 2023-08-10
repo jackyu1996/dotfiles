@@ -1,0 +1,24 @@
+# Rime dictionary
+# encoding: utf-8
+
+---
+name: aurora_pinyin.personal
+version: "2021.12.09"
+sort: by_weight
+use_preset_vocabulary: true
+...
+
+&lr=lang_zh-CN	lrcn
+&lr=lang_zh-TW	lrtw
+&lr=lang_en	lren
+&gl=uk	gluk
+&gl=us	glus
+&gl=hk	glhk
+&gl=tw	gltw
+zh-CN	zc
+zh-TW	zt
+zh-HK	zh
+en-US	eu
+en-UK	ek
+N/A	na
+

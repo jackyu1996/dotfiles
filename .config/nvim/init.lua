@@ -20,6 +20,9 @@ g.gui_font_default_size = 12
 g.gui_font_size = g.gui_font_default_size
 g.gui_font_face = "FiraCode Nerd Font"
 
+g.loaded_netrw = 1
+g.loaded_netrwPlugin = 1
+
 RefreshGuiFont = function()
     opt.guifont = string.format("%s:h%s", g.gui_font_face, g.gui_font_size)
 end
@@ -47,24 +50,20 @@ mapkey("n", "<C-j>", "<C-w>j", mapping_opts)
 mapkey("n", "<C-k>", "<C-w>k", mapping_opts)
 mapkey("n", "<C-l>", "<C-w>l", mapping_opts)
 mapkey("n", "<F11>", "<cmd>terminal<CR>", mapping_opts)
-mapkey("n", "<F5>", "<cmd>DapContinue<CR>", mapping_opts)
-mapkey("n", "<F6>", "<cmd>DapToggleBreakpoint<CR>", mapping_opts)
-mapkey("n", "<F7>", "<cmd>DapStepOver<CR>", mapping_opts)
-mapkey("n", "<F8>", "<cmd>DapStepInto<CR>", mapping_opts)
-mapkey("n", "<F9>", "<cmd>DapStepOut<CR>", mapping_opts)
+mapkey("t", "<C-w><ESC>", "<C-\\><C-n>", mapping_opts)
 mapkey("n", "<leader>b", "<cmd>SymbolsOutline<CR>", mapping_opts)
-mapkey("n", "<leader>d", "<cmd>lua require('dapui').toggle()<CR>", mapping_opts)
 mapkey("n", "<leader>e", "<cmd>TroubleToggle<CR>", mapping_opts)
 mapkey("n", "<leader>h", "<cmd>set hlsearch!<CR>", mapping_opts)
 mapkey("n", "<leader>k", "<cmd>Telescope keymaps<CR>", mapping_opts)
 mapkey("n", "<leader>n", "<cmd>Telescope buffers<CR>", mapping_opts)
 mapkey("n", "<leader>p", "<cmd>Telescope find_files<CR>", mapping_opts)
-mapkey("n", "<leader>q", "<cmd>quit!<CR>", mapping_opts)
+mapkey("n", "<leader>q", "<cmd>hide<CR>", mapping_opts)
 mapkey("n", "<leader>r", "<cmd>Telescope live_grep<CR>", mapping_opts)
 mapkey("n", "<leader>t", "<cmd>NvimTreeToggle<CR>", mapping_opts)
 mapkey("n", "<leader>w", "<cmd>write<CR>", mapping_opts)
 mapkey("n", "<leader>x", "<cmd>quitall!<CR>", mapping_opts)
 mapkey("x", "<leader>a", "<cmd>EasyAlign<CR>", mapping_opts)
+mapkey("t", "<Esc>", "<C-\\><C-n>", mapping_opts)
 
 opt.autoindent = true
 opt.autoread = true
@@ -144,6 +143,10 @@ require("packer").startup(function(use)
         end
     }
 
+    use { "nvim-treesitter/nvim-treesitter-context" }
+
+    use { "nvim-treesitter/nvim-treesitter-textobjects" }
+
     use { "neovim/nvim-lspconfig" }
 
     use {
@@ -185,7 +188,7 @@ require("packer").startup(function(use)
                 mapkey("n", "gr", lsp.buf.references, bufopts)
                 mapkey("n", "gi", lsp.buf.implementation, bufopts)
                 mapkey("n", "K", lsp.buf.hover, bufopts)
-                mapkey("n", "<C-k>", lsp.buf.signature_help, bufopts)
+                mapkey("n", "<C-S-k>", lsp.buf.signature_help, bufopts)
                 mapkey("n", "<space>D", lsp.buf.type_definition, bufopts)
                 mapkey("n", "<space>rn", lsp.buf.rename, bufopts)
                 mapkey("n", "<space>ca", lsp.buf.code_action, bufopts)
@@ -195,7 +198,7 @@ require("packer").startup(function(use)
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
             local servers =
-            { "bashls", "clangd", "cmake", "cssls", "dartls", "denols", "emmet_ls", "eslint", "gopls", "html", "jdtls",
+            { "bashls", "clangd", "cssls", "dartls", "emmet_ls", "eslint", "gopls", "html", "jdtls",
                 "jedi_language_server", "jsonls", "rust_analyzer", "lua_ls", "svelte", "tailwindcss", "tsserver",
             "marksman" }
 
@@ -233,19 +236,17 @@ require("packer").startup(function(use)
 
     use { "hrsh7th/cmp-cmdline" }
 
-    use { "dmitmel/cmp-digraphs" }
-
     use {
         "hrsh7th/nvim-cmp",
         config = function()
-            local api = vim.api
-
-            local has_words_before = function()
-                local line, col = table.unpack(api.nvim_win_get_cursor(0))
-                return col ~= 0 and
-                api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-            end
-            local luasnip = require("luasnip")
+            -- local api = vim.api
+            --
+            -- local has_words_before = function()
+            --     local line, col = table.unpack(api.nvim_win_get_cursor(0))
+            --     return col ~= 0 and
+            --     api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+            -- end
+            -- local luasnip = require("luasnip")
             local cmp = require("cmp")
 
             cmp.setup {
@@ -268,7 +269,6 @@ require("packer").startup(function(use)
                 sources = cmp.config.sources({
                         { name = "nvim_lsp" },
                         { name = "luasnip" },
-                        { name = "digraphs" },
                     }, {
                         { name = "buffer" },
                     })
@@ -293,10 +293,19 @@ require("packer").startup(function(use)
     }
 
     use {
+        "kylechui/nvim-surround",
+        tag = "*",
+        config = function()
+            require("nvim-surround").setup {}
+        end
+    }
+
+    use {
         "windwp/nvim-autopairs",
         config = function()
             require("nvim-autopairs").setup {
-                fast_wrap = {}
+                fast_wrap = {},
+                map_c_h = true,
             }
         end
     }
@@ -309,8 +318,8 @@ require("packer").startup(function(use)
     }
 
     use {
-        "kyazdani42/nvim-tree.lua",
-        requires = { "kyazdani42/nvim-web-devicons" },
+        "nvim-tree/nvim-tree.lua",
+        requires = { "nvim-tree/nvim-web-devicons" },
         config = function()
             require("nvim-tree").setup {}
         end
@@ -337,91 +346,6 @@ require("packer").startup(function(use)
     }
 
     use {
-        "mfussenegger/nvim-dap",
-        config = function()
-            local fn = vim.fn
-            local dap = require('dap')
-
-            dap.adapters.lldb = {
-                type = "executable",
-                command = "/usr/bin/lldb-vscode",
-                name = "lldb"
-            }
-            dap.configurations.c = {
-                {
-                    name = 'Launch',
-                    type = 'lldb',
-                    request = 'launch',
-                    program = function()
-                        return fn.input('Path to executable: ', fn.getcwd() .. '/', 'file')
-                    end,
-                    cwd = '${workspaceFolder}',
-                    stopOnEntry = false,
-                    args = {},
-                },
-            }
-            dap.configurations.rust = dap.configurations.c
-
-            dap.adapters.delve = {
-                type = 'server',
-                port = '${port}',
-                executable = {
-                    command = 'dlv',
-                    args = { 'dap', '-l', '127.0.0.1:${port}' },
-                }
-            }
-            dap.configurations.go = {
-                {
-                    type = "delve",
-                    name = "Debug",
-                    request = "launch",
-                    program = "${file}"
-                },
-                {
-                    type = "delve",
-                    name = "Debug test (go.mod)",
-                    request = "launch",
-                    mode = "test",
-                    program = "./${relativeFileDirname}"
-                }
-            }
-
-            local venv = os.getenv("VIRTUAL_ENV")
-            local executable = fn.getcwd() .. string.format("%s/bin/python", venv)
-            dap.adapters.python = {
-                type = 'executable',
-                command = (venv == nil and "/usr/bin/python" or executable),
-                args = { '-m', 'debugpy.adapter' }
-            }
-            dap.configurations.python = {
-                {
-                    type = 'python';
-                    request = 'launch';
-                    name = "Launch file";
-                    program = "${file}";
-                    pythonPath = function()
-                        local cwd = fn.getcwd()
-                        if fn.executable(cwd .. '/venv/bin/python') == 1 then
-                            return cwd .. '/venv/bin/python'
-                        elseif fn.executable(cwd .. '/.venv/bin/python') == 1 then
-                            return cwd .. '/.venv/bin/python'
-                        else
-                            return '/usr/bin/python'
-                        end
-                    end;
-                },
-            }
-        end
-    }
-
-    use {
-        "rcarriga/nvim-dap-ui",
-        config = function()
-            require("dapui").setup {}
-        end
-    }
-
-    use {
         "lewis6991/gitsigns.nvim",
         config = function()
             require("gitsigns").setup {}
@@ -429,25 +353,23 @@ require("packer").startup(function(use)
     }
 
     use {
-        "kyazdani42/nvim-web-devicons",
+        "nvim-tree/nvim-web-devicons",
         config = function()
             require("nvim-web-devicons").setup { default = true }
         end
     }
 
     use {
-        "feline-nvim/feline.nvim",
+        "nvim-lualine/lualine.nvim",
         config = function()
-            require("feline").setup {}
-        end
-    }
+            require("lualine").setup {
+                options = {
+                    theme = "onedark",
+                    section_separators = "",
+                    component_separators = "",
 
-    use {
-        "akinsho/bufferline.nvim",
-        tag = "v2.*",
-        requires = "kyazdani42/nvim-web-devicons",
-        config = function()
-            require("bufferline").setup {}
+                },
+            }
         end
     }
 
@@ -456,6 +378,11 @@ require("packer").startup(function(use)
         config = function()
             require("onedark").load()
         end
+    }
+
+    use {
+        "sindrets/diffview.nvim",
+        requires = "nvim-lua/plenary.nvim"
     }
 
     use {
@@ -482,6 +409,23 @@ require("packer").startup(function(use)
     }
 
     use {
+        "RRethy/vim-illuminate",
+    }
+
+    use {
+        "folke/todo-comments.nvim",
+        requires = "nvim-lua/plenary.nvim",
+        config = function()
+            require("todo-comments").setup {}
+        end
+    }
+
+    use {
+        "romgrk/barbar.nvim",
+        requires = "nvim-web-devicons"
+    }
+
+    use {
         "simrat39/symbols-outline.nvim",
         config = function()
             require("symbols-outline").setup {}
@@ -490,16 +434,9 @@ require("packer").startup(function(use)
 
     use {
         "folke/trouble.nvim",
-        requires = "kyazdani42/nvim-web-devicons",
+        requires = "nvim-tree/nvim-web-devicons",
         config = function()
             require("trouble").setup {}
-        end
-    }
-
-    use {
-        "lewis6991/spellsitter.nvim",
-        config = function()
-            require("spellsitter").setup()
         end
     }
 end)

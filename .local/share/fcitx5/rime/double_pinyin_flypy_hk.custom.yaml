@@ -2,7 +2,8 @@ patch:
   __include: easy_en:/patch
 
   translator:
-    dictionary: aurora_pinyin.extended
+    dictionary: luna_pinyin.extended
+    prism: double_pinyin_flypy_hk
 
   switches:
     - name: ascii_mode
