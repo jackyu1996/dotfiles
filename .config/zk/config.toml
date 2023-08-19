@@ -1,0 +1,33 @@
+[notebook]
+dir = "~/Documents/notes"
+
+[note]
+template = "default.md"
+filename = "{{format-date now '%Y-%m-%d'}}-{{slug title}}"
+extension = "md"
+
+[extra]
+author = "Jack Yu"
+
+[format.markdown]
+hashtags = false
+
+[tool]
+editor = "nvim"
+shell = "/bin/zsh"
+pager = "bat -p --color always"
+fzf-preview = "bat -p --color always {-1}"
+
+[filter]
+recents = "--sort created- --created-after 'last two weeks'"
+
+[alias]
+lucky = "zk list --quiet --format full --sort random --limit 1"
+l = "zk list $@"
+e = "zk edit $@"
+n = "zk new $@"
+bl = "zk list --link-to $@"
+
+[lsp]
+[lsp.diagnostics]
+dead-link = "error"

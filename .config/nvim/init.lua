@@ -199,9 +199,7 @@ require("packer").startup(function(use)
 
             local servers =
             { "bashls", "clangd", "cssls", "dartls", "emmet_ls", "eslint", "gopls", "html", "jdtls",
-                "jedi_language_server", "jsonls", "rust_analyzer", "lua_ls", "svelte", "tailwindcss", "tsserver",
-            "marksman" }
-
+                "jedi_language_server", "jsonls", "rust_analyzer", "lua_ls", "svelte", "tailwindcss", "tsserver", "zk" }
 
             for _, server in ipairs(servers) do
                 require("lspconfig")[server].setup { capabilities = capabilities, on_attach = on_attach }
