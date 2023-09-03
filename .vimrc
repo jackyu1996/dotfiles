@@ -210,6 +210,8 @@ nnoremap <leader>r :Rg<CR>
 nnoremap <leader>t :Lexplore<CR>
 nnoremap <leader>w :write<CR>
 nnoremap <leader>x :quitall!<CR>
+nnoremap / /\v
+cnoremap %s/ %s/\v
 "}}}
 " Netrw{{{
 let g:netrw_banner = 0

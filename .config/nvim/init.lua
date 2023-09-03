@@ -64,6 +64,8 @@ mapkey("n", "<leader>w", "<cmd>write<CR>", mapping_opts)
 mapkey("n", "<leader>x", "<cmd>quitall!<CR>", mapping_opts)
 mapkey("x", "<leader>a", "<cmd>EasyAlign<CR>", mapping_opts)
 mapkey("t", "<Esc>", "<C-\\><C-n>", mapping_opts)
+mapkey("n", "/", "/\v", mapping_opts)
+mapkey("c", "%s/", "%s/\v", mapping_opts)
 
 opt.autoindent = true
 opt.autoread = true
