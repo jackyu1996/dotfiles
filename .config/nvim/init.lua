@@ -4,14 +4,20 @@ local g = vim.g
 local lsp = vim.lsp
 local mapkey = vim.keymap.set
 local opt = vim.opt
+local loop = vim.loop
 
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-    packer_bootstrap = fn.system({
-            "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path
+local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not loop.fs_stat(lazypath) then
+    fn.system({
+            "git",
+            "clone",
+            "--filter=blob:none",
+            "https://github.com/folke/lazy.nvim.git",
+            "--branch=stable",
+            lazypath,
         })
-    api.cmd [[packadd packer.nvim]]
 end
+opt.rtp:prepend(lazypath)
 
 g.mapleader = " "
 g.maplocalleader = " "
@@ -63,8 +69,11 @@ mapkey("n", "<leader>t", "<cmd>NvimTreeToggle<CR>", mapping_opts)
 mapkey("n", "<leader>w", "<cmd>write<CR>", mapping_opts)
 mapkey("n", "<leader>x", "<cmd>quitall!<CR>", mapping_opts)
 mapkey("x", "<leader>a", "<cmd>EasyAlign<CR>", mapping_opts)
+mapkey("n", "<leader>e", vim.diagnostic.open_float, mapping_opts)
+mapkey("n", "[d", vim.diagnostic.goto_prev, mapping_opts)
+mapkey("n", "]d", vim.diagnostic.goto_next, mapping_opts)
+mapkey("n", "<leader>q", vim.diagnostic.setloclist, mapping_opts)
 mapkey("t", "<Esc>", "<C-\\><C-n>", mapping_opts)
-mapkey("c", "/", "/\\v", mapping_opts)
 mapkey("c", "%s/", "%s/\\v", mapping_opts)
 
 opt.autoindent = true
@@ -121,132 +130,145 @@ api.nvim_create_autocmd("LspAttach", {
         end,
     })
 
-require("packer").startup(function(use)
-    use { "wbthomason/packer.nvim" }
-
-    use { "junegunn/vim-easy-align" }
-
-    use {
-        "nvim-treesitter/nvim-treesitter",
-        config = function()
-            require("nvim-treesitter.configs").setup {
-                ensure_installed = { "c", "lua", "python", "go", "rust" },
-                sync_install = false,
-                auto_install = true,
-                enable = true,
-                matchup = {
+require("lazy").setup({
+        { "junegunn/vim-easy-align" },
+        { "nvim-treesitter/nvim-treesitter-context" },
+        { "nvim-treesitter/nvim-treesitter-textobjects" },
+        {
+            "nvim-treesitter/nvim-treesitter",
+            config = function()
+                require("nvim-treesitter.configs").setup {
+                    ensure_installed = { "c", "lua", "python", "go", "rust" },
+                    sync_install = false,
+                    auto_install = true,
                     enable = true,
-                },
-                highlight = {
-                    enable = true,
-                    use_languagetree = true,
+                    matchup = {
+                        enable = true,
+                    },
+                    highlight = {
+                        enable = true,
+                        use_languagetree = true,
+                    }
                 }
-            }
-        end
-    }
+            end
+        },
+        {
+            "neovim/nvim-lspconfig",
+            config = function()
+                local lspconfig = require('lspconfig')
+                local configs = require('lspconfig/configs')
+                local util = require('lspconfig/util')
 
-    use { "nvim-treesitter/nvim-treesitter-context" }
+                local path = util.path
 
-    use { "nvim-treesitter/nvim-treesitter-textobjects" }
+                local function get_python_path(workspace)
+                    -- See https://github.com/neovim/nvim-lspconfig/issues/500
+                    -- Use activated virtualenv.
+                    if vim.env.VIRTUAL_ENV then
+                        return path.join(vim.env.VIRTUAL_ENV, 'bin', 'python')
+                    end
 
-    use { "neovim/nvim-lspconfig" }
+                    -- Find and use virtualenv in workspace directory.
+                    for _, pattern in ipairs({'*', '.*'}) do
+                        local match = vim.fn.glob(path.join(workspace, pattern, 'pyvenv.cfg'))
+                        if match ~= '' then
+                            return path.join(path.dirname(match), 'bin', 'python')
+                        end
+                    end
 
-    use {
-        "williamboman/mason.nvim",
-        config = function()
-            require("mason").setup {}
-        end
-    }
+                    -- Fallback to system Python.
+                    return exepath('python3') or exepath('python') or 'python'
+                end
 
-    use {
-        "williamboman/mason-lspconfig.nvim",
-        config = function()
-            require("mason-lspconfig").setup {
-                automatic_installation = true,
-            }
-        end
-    }
+                lspconfig.pylsp.setup({
+                        before_init = function(_, config)
+                            config.settings.python.pythonPath = get_python_path(config.root_dir)
+                        end
+                    })
+            end
+        },
+        {
+            "williamboman/mason.nvim",
+            config = function()
+                require("mason").setup {}
+            end
+        },
+        {
+            "williamboman/mason-lspconfig.nvim",
+            config = function()
+                require("mason-lspconfig").setup {
+                    automatic_installation = true
+                }
+            end
+        },
+        {
+            "ray-x/lsp_signature.nvim",
+            config = function()
+                require("lsp_signature").setup {}
+            end
+        },
+        {
+            "hrsh7th/cmp-nvim-lsp",
+            config = function()
+                local on_attach = function(client, bufnr)
+                    -- warning: alias variables for vim have to be redefined
+                    local mapkey = vim.keymap.set
+                    local lsp = vim.lsp
+                    local api = vim.api
 
-    use {
-        "ray-x/lsp_signature.nvim",
-        config = function()
-            require("lsp_signature").setup {}
-        end
-    }
-
-    use {
-        "hrsh7th/cmp-nvim-lsp",
-        config = function()
-            local on_attach = function(client, bufnr)
-                -- warning: alias variables for vim have to be redefined
-                local mapkey = vim.keymap.set
-                local lsp = vim.lsp
-                local api = vim.api
-
-                api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-                local bufopts = { noremap = true, silent = true, buffer = bufnr }
-                mapkey("n", "gD", lsp.buf.declaration, bufopts)
-                mapkey("n", "gd", lsp.buf.definition, bufopts)
-                mapkey("n", "gr", lsp.buf.references, bufopts)
-                mapkey("n", "gi", lsp.buf.implementation, bufopts)
-                mapkey("n", "K", lsp.buf.hover, bufopts)
-                mapkey("n", "<C-S-k>", lsp.buf.signature_help, bufopts)
-                mapkey("n", "<space>D", lsp.buf.type_definition, bufopts)
-                mapkey("n", "<space>rn", lsp.buf.rename, bufopts)
-                mapkey("n", "<space>ca", lsp.buf.code_action, bufopts)
-                mapkey("n", "<space>f", lsp.buf.format, bufopts)
+                    api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+                    local bufopts = { noremap = true, silent = true, buffer = bufnr }
+                    mapkey("n", "gD", lsp.buf.declaration, bufopts)
+                    mapkey("n", "gd", lsp.buf.definition, bufopts)
+                    mapkey("n", "gr", lsp.buf.references, bufopts)
+                    mapkey("n", "gi", lsp.buf.implementation, bufopts)
+                    mapkey("n", "K", lsp.buf.hover, bufopts)
+                    mapkey("n", "<C-S-k>", lsp.buf.signature_help, bufopts)
+                    mapkey("n", "<space>D", lsp.buf.type_definition, bufopts)
+                    mapkey("n", "<space>rn", lsp.buf.rename, bufopts)
+                    mapkey("n", "<space>ca", lsp.buf.code_action, bufopts)
+                    mapkey("n", "<space>f", function()
+                        lsp.buf.format { async = true }
+                    end, bufopts)
             end
 
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-            local servers =
-            { "bashls", "clangd", "cssls", "dartls", "emmet_ls", "eslint", "gopls", "html", "jdtls",
-                "jedi_language_server", "jsonls", "rust_analyzer", "lua_ls", "svelte", "tailwindcss", "tsserver", "zk" }
+            local servers = {
+                "bashls", "clangd", "cssls", "cssmodules_ls", "emmet_ls", "eslint", "gopls", "html", "jdtls",
+                "biome", "pylsp", "kotlin_language_server", "rust_analyzer", "lua_ls", "svelte",
+                "tailwindcss", "tsserver", "zk", "lemminx", "sqlls", "texlab", "docker_compose_language_service",
+                "pyre", "remark_ls", "yamlls"
+            }
 
             for _, server in ipairs(servers) do
                 require("lspconfig")[server].setup { capabilities = capabilities, on_attach = on_attach }
             end
         end
-    }
-
-    use {
+    },
+    {
         "lvimuser/lsp-inlayhints.nvim",
         config = function()
             require("lsp-inlayhints").setup()
         end
-    }
-
-    use {
+    },
+    {
         "honza/vim-snippets",
         event = "InsertEnter",
-    }
-
-    use {
+    },
+    {
         "L3MON4D3/LuaSnip",
         config = function()
             require("luasnip.loaders.from_snipmate").lazy_load()
         end
-    }
-
-    use { "saadparwaiz1/cmp_luasnip" }
-
-    use { "hrsh7th/cmp-buffer" }
-
-    use { "hrsh7th/cmp-path" }
-
-    use { "hrsh7th/cmp-cmdline" }
-
-    use {
+    },
+    { "saadparwaiz1/cmp_luasnip" },
+    { "hrsh7th/cmp-buffer" },
+    { "hrsh7th/cmp-path" },
+    { "hrsh7th/cmp-cmdline" },
+    {
         "hrsh7th/nvim-cmp",
         config = function()
-            -- local api = vim.api
-            --
-            -- local has_words_before = function()
-            --     local line, col = table.unpack(api.nvim_win_get_cursor(0))
-            --     return col ~= 0 and
-            --     api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-            -- end
-            -- local luasnip = require("luasnip")
             local cmp = require("cmp")
 
             cmp.setup {
@@ -290,17 +312,16 @@ require("packer").startup(function(use)
                         })
                 })
         end
-    }
-
-    use {
+    },
+    {
         "kylechui/nvim-surround",
-        tag = "*",
+        version = "*",
+        event = "VeryLazy",
         config = function()
             require("nvim-surround").setup {}
         end
-    }
-
-    use {
+    },
+    {
         "windwp/nvim-autopairs",
         config = function()
             require("nvim-autopairs").setup {
@@ -308,26 +329,22 @@ require("packer").startup(function(use)
                 map_c_h = true,
             }
         end
-    }
-
-    use {
+    },
+    {
         "numToStr/Comment.nvim",
         config = function()
             require("Comment").setup {}
         end
-    }
-
-    use {
+    },
+    {
         "nvim-tree/nvim-tree.lua",
-        requires = { "nvim-tree/nvim-web-devicons" },
         config = function()
             require("nvim-tree").setup {}
         end
-    }
-
-    use {
-        "nvim-telescope/telescope.nvim", tag = "0.1.0",
-        requires = { "nvim-lua/plenary.nvim" },
+    },
+    {
+        "nvim-telescope/telescope.nvim", branch = "0.1.x",
+        dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
             require("telescope").setup {
                 defaults = {
@@ -343,23 +360,21 @@ require("packer").startup(function(use)
                 }
             }
         end
-    }
-
-    use {
+    },
+    {
         "lewis6991/gitsigns.nvim",
         config = function()
             require("gitsigns").setup {}
         end
-    }
-
-    use {
+    },
+    {
         "nvim-tree/nvim-web-devicons",
+        lazy = true,
         config = function()
             require("nvim-web-devicons").setup { default = true }
         end
-    }
-
-    use {
+    },
+    {
         "nvim-lualine/lualine.nvim",
         config = function()
             require("lualine").setup {
@@ -371,72 +386,63 @@ require("packer").startup(function(use)
                 },
             }
         end
-    }
-
-    use {
+    },
+    {
         "navarasu/onedark.nvim",
         config = function()
             require("onedark").load()
         end
-    }
-
-    use {
-        "sindrets/diffview.nvim",
-        requires = "nvim-lua/plenary.nvim"
-    }
-
-    use {
+    },
+    {
+        "sindrets/diffview.nvim"
+    },
+    {
         "ggandor/leap.nvim",
         config = function()
             require("leap").set_default_keymaps {}
         end
-    }
-
-    use {
+    },
+    {
         "andymass/vim-matchup",
         event = "VimEnter",
-    }
-
-    use {
+    },
+    {
         "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
         config = function()
-            require("indent_blankline").setup {
-                space_char_blankline = " ",
-                show_current_context = true,
-                show_current_context_start = true,
-            }
+            require("ibl").setup { }
         end
-    }
-
-    use {
-        "RRethy/vim-illuminate",
-    }
-
-    use {
+    },
+    { "RRethy/vim-illuminate" },
+    {
         "folke/todo-comments.nvim",
-        requires = "nvim-lua/plenary.nvim",
         config = function()
             require("todo-comments").setup {}
         end
-    }
-
-    use {
-        "romgrk/barbar.nvim",
-        requires = "nvim-web-devicons"
-    }
-
-    use {
+    },
+    {
+        "romgrk/barbar.nvim"
+    },
+    {
         "simrat39/symbols-outline.nvim",
         config = function()
             require("symbols-outline").setup {}
         end
-    }
-
-    use {
+    },
+    {
         "folke/trouble.nvim",
-        requires = "nvim-tree/nvim-web-devicons",
         config = function()
             require("trouble").setup {}
         end
+    },
+    {
+        dir ="~/Work/projects/ChatGPT.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("chatgpt").setup()
+        end,
+        dependencies = {
+            "MunifTanjim/nui.nvim"
+        }
     }
-end)
+})
