@@ -1,17 +1,15 @@
-# git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
-source "${HOME}/.zgen/zgen.zsh"
-if ! zgen-saved; then
-    zgen load ael-code/zsh-colored-man-pages
-    zgen load mafredri/zsh-async async.zsh
-    zgen load marzocchi/zsh-notify
-    zgen load sindresorhus/pure pure.zsh main
-    zgen load zdharma-continuum/fast-syntax-highlighting
-    zgen load zsh-users/zsh-autosuggestions
-    zgen load zsh-users/zsh-completions src
-    zgen load agkozak/zsh-z
+source "/usr/share/zinit/zinit.zsh"
+zinit ice pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure
 
-    zgen save
-fi
+zinit wait lucid for \
+    ael-code/zsh-colored-man-pages \
+    zdharma-continuum/fast-syntax-highlighting \
+    zdharma-continuum/history-search-multi-word \
+    zsh-users/zsh-autosuggestions \
+    marzocchi/zsh-notify \
+    zsh-users/zsh-completions \
+    agkozak/zsh-z
 
 zstyle ':prompt:pure:path' color white
 zstyle ':prompt:pure:prompt:error' color white
