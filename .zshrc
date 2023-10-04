@@ -17,6 +17,8 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
 
 zstyle ':notify:*' error-title "WHAT!!!"
 zstyle ':notify:*' success-title "Meh"
@@ -26,6 +28,9 @@ zle -N edit-command-line
 autoload -Uz edit-command-line
 bindkey -v
 bindkey -M vicmd 'v' edit-command-line
+
+autoload -Uz compinit
+compinit
 
 bindkey '^P' up-history
 bindkey '^N' down-history
