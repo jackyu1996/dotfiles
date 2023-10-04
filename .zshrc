@@ -5,10 +5,9 @@ zinit light sindresorhus/pure
 zinit wait lucid for \
     ael-code/zsh-colored-man-pages \
     zdharma-continuum/fast-syntax-highlighting \
-    zdharma-continuum/history-search-multi-word \
     zsh-users/zsh-autosuggestions \
-    marzocchi/zsh-notify \
     zsh-users/zsh-completions \
+    marzocchi/zsh-notify \
     agkozak/zsh-z
 
 zstyle ':prompt:pure:path' color white
@@ -55,10 +54,8 @@ export GO111MODULE=on
 export GOPROXY="https://goproxy.cn,direct"
 export GOPATH="$HOME/.go"
 export PIPENV_PYPI_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
-export PUB_HOSTED_URL="https://pub.flutter-io.cn"
-export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
 export ANDROID_SDK_ROOT="$HOME/.android/sdk/"
-export PATH="${PATH}:/opt/flutter/bin:$HOME/.local/bin"
+export PATH="${PATH}:$HOME/.local/bin"
 export VISUAL=vim
 export NVM_DIR="$HOME/.nvm"
 
