@@ -187,6 +187,20 @@ require("lazy").setup({
                             config.settings.python.pythonPath = get_python_path(config.root_dir)
                         end
                     })
+
+                lspconfig.emmet_ls.setup({
+                        filetypes = {
+                            "astro", "css", "eruby", "html", "htmldjango",
+                            "javascriptreact", "less", "pug", "sass", "scss",
+                            "svelte", "typescriptreact", "vue", "template"
+                        }
+                    })
+
+                lspconfig.html.setup({
+                        filetypes = {
+                            "html", "template"
+                        }
+                    })
             end
         },
         {
