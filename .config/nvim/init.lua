@@ -148,25 +148,27 @@ function get_python_path(workspace)
 end
 
 require("lazy").setup({
-        { "junegunn/vim-easy-align" },
         { "nvim-treesitter/nvim-treesitter-context" },
-        { "nvim-treesitter/nvim-treesitter-textobjects" },
+        {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+            lazy = true
+        },
         {
             "nvim-treesitter/nvim-treesitter",
             config = function()
-                require("nvim-treesitter.configs").setup {
-                    ensure_installed = { "c", "lua", "python", "go", "rust" },
-                    sync_install = false,
-                    auto_install = true,
-                    enable = true,
-                    matchup = {
+                require("nvim-treesitter.configs").setup({
+                        ensure_installed = {
+                            "c", "lua", "python", "go", "rust", "bash",
+                            "css", "javascript", "html", "diff", "json",
+                            "latex", "sql", "xml", "yaml"
+                        },
+                        sync_install = false,
+                        auto_install = true,
                         enable = true,
-                    },
-                    highlight = {
-                        enable = true,
-                        use_languagetree = true,
-                    }
-                }
+                        highlight = {
+                            enable = true,
+                        }
+                    })
             end
         },
         {
@@ -183,22 +185,21 @@ require("lazy").setup({
         },
         {
             "williamboman/mason.nvim",
+            event = "VeryLazy",
             config = function()
-                require("mason").setup {}
+                require("mason").setup({})
             end
         },
         {
             "williamboman/mason-lspconfig.nvim",
             config = function()
-                require("mason-lspconfig").setup {
-                    automatic_installation = true
-                }
+                require("mason-lspconfig").setup({})
             end
         },
         {
             "ray-x/lsp_signature.nvim",
             config = function()
-                require("lsp_signature").setup {}
+                require("lsp_signature").setup({})
             end
         },
         {
@@ -231,7 +232,7 @@ require("lazy").setup({
             }
 
             for _, server in ipairs(servers) do
-                require("lspconfig")[server].setup { capabilities = capabilities, on_attach = on_attach }
+                require("lspconfig")[server].setup({ capabilities = capabilities, on_attach = on_attach })
             end
         end
     },
@@ -260,30 +261,30 @@ require("lazy").setup({
         config = function()
             local cmp = require("cmp")
 
-            cmp.setup {
-                snippet = {
-                    expand = function(args)
-                        require("luasnip").lsp_expand(args.body)
-                    end,
-                },
-                window = {
-                    completion = cmp.config.window.bordered(),
-                    documentation = cmp.config.window.bordered(),
-                },
-                mapping = cmp.mapping.preset.insert({
-                        ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-                        ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                        ["<C-Space>"] = cmp.mapping.complete(),
-                        ["<C-e>"] = cmp.mapping.abort(),
-                        ["<CR>"] = cmp.mapping.confirm({ select = true }),
-                    }),
-                sources = cmp.config.sources({
-                        { name = "nvim_lsp" },
-                        { name = "luasnip" },
-                    }, {
-                        { name = "buffer" },
-                    })
-            }
+            cmp.setup({
+                    snippet = {
+                        expand = function(args)
+                            require("luasnip").lsp_expand(args.body)
+                        end,
+                    },
+                    window = {
+                        completion = cmp.config.window.bordered(),
+                        documentation = cmp.config.window.bordered(),
+                    },
+                    mapping = cmp.mapping.preset.insert({
+                            ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+                            ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                            ["<C-Space>"] = cmp.mapping.complete(),
+                            ["<C-e>"] = cmp.mapping.abort(),
+                            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+                        }),
+                    sources = cmp.config.sources({
+                            { name = "nvim_lsp" },
+                            { name = "luasnip" },
+                        }, {
+                            { name = "buffer" },
+                        })
+                })
 
             cmp.setup.cmdline("/", {
                     mapping = cmp.mapping.preset.cmdline(),
@@ -303,77 +304,83 @@ require("lazy").setup({
         end
     },
     {
+        "junegunn/vim-easy-align",
+        event = "VeryLazy"
+    },
+    {
         "kylechui/nvim-surround",
         version = "*",
         event = "VeryLazy",
         config = function()
-            require("nvim-surround").setup {}
+            require("nvim-surround").setup({})
         end
     },
     {
         "windwp/nvim-autopairs",
         config = function()
-            require("nvim-autopairs").setup {
-                fast_wrap = {},
-                map_c_h = true,
-            }
+            require("nvim-autopairs").setup({
+                    fast_wrap = {},
+                    map_c_h = true,
+                })
         end
     },
     {
         "numToStr/Comment.nvim",
+        event = "VeryLazy",
         config = function()
-            require("Comment").setup {}
+            require("Comment").setup({})
         end
     },
     {
         "nvim-tree/nvim-tree.lua",
+        event = "VeryLazy",
         config = function()
-            require("nvim-tree").setup {}
+            require("nvim-tree").setup({})
         end
     },
     {
         "nvim-telescope/telescope.nvim", branch = "0.1.x",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
-            require("telescope").setup {
-                defaults = {
-                    vimgrep_arguments = {
-                        "rg",
-                        "--color=never",
-                        "--no-heading",
-                        "--with-filename",
-                        "--line-number",
-                        "--column",
-                        "--smart-case",
+            require("telescope").setup({
+                    defaults = {
+                        vimgrep_arguments = {
+                            "rg",
+                            "--color=never",
+                            "--no-heading",
+                            "--with-filename",
+                            "--line-number",
+                            "--column",
+                            "--smart-case",
+                        }
                     }
-                }
-            }
+                })
         end
     },
     {
         "lewis6991/gitsigns.nvim",
         config = function()
-            require("gitsigns").setup {}
+            require("gitsigns").setup({})
         end
     },
     {
         "nvim-tree/nvim-web-devicons",
         lazy = true,
         config = function()
-            require("nvim-web-devicons").setup { default = true }
+            require("nvim-web-devicons").setup({ default = true })
         end
     },
     {
         "nvim-lualine/lualine.nvim",
         config = function()
-            require("lualine").setup {
-                options = {
-                    theme = "onedark",
-                    section_separators = "",
-                    component_separators = "",
+            require("lualine").setup({
+                    options = {
+                        theme = "onedark",
+                        section_separators = "",
+                        component_separators = "",
 
-                },
-            }
+                    },
+                })
         end
     },
     {
@@ -387,6 +394,7 @@ require("lazy").setup({
     },
     {
         "ggandor/leap.nvim",
+        event = "VeryLazy",
         config = function()
             require("leap").set_default_keymaps {}
         end
@@ -399,14 +407,14 @@ require("lazy").setup({
         "lukas-reineke/indent-blankline.nvim",
         main = "ibl",
         config = function()
-            require("ibl").setup { }
+            require("ibl").setup({})
         end
     },
     { "RRethy/vim-illuminate" },
     {
         "folke/todo-comments.nvim",
         config = function()
-            require("todo-comments").setup {}
+            require("todo-comments").setup({})
         end
     },
     {
@@ -415,20 +423,20 @@ require("lazy").setup({
     {
         "simrat39/symbols-outline.nvim",
         config = function()
-            require("symbols-outline").setup {}
+            require("symbols-outline").setup({})
         end
     },
     {
         "folke/trouble.nvim",
         config = function()
-            require("trouble").setup {}
+            require("trouble").setup({})
         end
     },
     {
         dir ="~/Work/projects/ChatGPT.nvim",
         event = "VeryLazy",
         config = function()
-            require("chatgpt").setup()
+            require("chatgpt").setup({})
         end,
         dependencies = {
             "MunifTanjim/nui.nvim"
