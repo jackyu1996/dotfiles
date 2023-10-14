@@ -1,12 +1,13 @@
-local api = vim.api
-local fn = vim.fn
-local g = vim.g
-local lsp = vim.lsp
-local mapkey = vim.keymap.set
-local opt = vim.opt
-local loop = vim.loop
+api = vim.api
+fn = vim.fn
+g = vim.g
+lsp = vim.lsp
+mapkey = vim.keymap.set
+opt = vim.opt
+loop = vim.loop
+env = vim.env
 
-local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
+lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not loop.fs_stat(lazypath) then
     fn.system({
             "git",
@@ -43,7 +44,7 @@ ResetGuiFont = function()
     RefreshGuiFont()
 end
 
-local mapping_opts = { noremap = true, silent = true }
+mapping_opts = { noremap = true, silent = true }
 
 mapkey("c", "<C-n>", "<down>", mapping_opts)
 mapkey("c", "<C-p>", "<up>", mapping_opts)
@@ -130,6 +131,22 @@ api.nvim_create_autocmd("LspAttach", {
         end,
     })
 
+function get_python_path(workspace)
+    if env.VIRTUAL_ENV then
+        return fn.resolve(env.VIRTUAL_ENV .. '/bin/python')
+    end
+
+    for _, pattern in ipairs({'*', '.*'}) do
+        local match = fn.glob(fn.resolve(workspace .. '/' .. pattern .. '/pyvenv.cfg'))
+        if match ~= '' then
+            return fn.resolve(fn.resolve(match) .. '/bin/python')
+        end
+    end
+
+    -- Fallback to system Python.
+    return fn.exepath('python3') or fn.exepath('python') or 'python'
+end
+
 require("lazy").setup({
         { "junegunn/vim-easy-align" },
         { "nvim-treesitter/nvim-treesitter-context" },
@@ -156,29 +173,6 @@ require("lazy").setup({
             "neovim/nvim-lspconfig",
             config = function()
                 local lspconfig = require('lspconfig')
-                local configs = require('lspconfig/configs')
-                local util = require('lspconfig/util')
-
-                local path = util.path
-
-                local function get_python_path(workspace)
-                    -- See https://github.com/neovim/nvim-lspconfig/issues/500
-                    -- Use activated virtualenv.
-                    if vim.env.VIRTUAL_ENV then
-                        return path.join(vim.env.VIRTUAL_ENV, 'bin', 'python')
-                    end
-
-                    -- Find and use virtualenv in workspace directory.
-                    for _, pattern in ipairs({'*', '.*'}) do
-                        local match = vim.fn.glob(path.join(workspace, pattern, 'pyvenv.cfg'))
-                        if match ~= '' then
-                            return path.join(path.dirname(match), 'bin', 'python')
-                        end
-                    end
-
-                    -- Fallback to system Python.
-                    return exepath('python3') or exepath('python') or 'python'
-                end
 
                 lspconfig.pylsp.setup({
                         before_init = function(_, config)
@@ -211,11 +205,6 @@ require("lazy").setup({
             "hrsh7th/cmp-nvim-lsp",
             config = function()
                 local on_attach = function(client, bufnr)
-                    -- warning: alias variables for vim have to be redefined
-                    local mapkey = vim.keymap.set
-                    local lsp = vim.lsp
-                    local api = vim.api
-
                     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
                     local bufopts = { noremap = true, silent = true, buffer = bufnr }
                     mapkey("n", "gD", lsp.buf.declaration, bufopts)
