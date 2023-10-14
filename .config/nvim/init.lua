@@ -59,6 +59,7 @@ mapkey("n", "<C-l>", "<C-w>l", mapping_opts)
 mapkey("n", "<F11>", "<cmd>terminal<CR>", mapping_opts)
 mapkey("t", "<C-w><ESC>", "<C-\\><C-n>", mapping_opts)
 mapkey("n", "<leader>b", "<cmd>SymbolsOutline<CR>", mapping_opts)
+mapkey("n", "<leader>c", "<cmd>ChatGPT<CR>", mapping_opts)
 mapkey("n", "<leader>e", "<cmd>TroubleToggle<CR>", mapping_opts)
 mapkey("n", "<leader>h", "<cmd>set hlsearch!<CR>", mapping_opts)
 mapkey("n", "<leader>k", "<cmd>Telescope keymaps<CR>", mapping_opts)
@@ -433,7 +434,7 @@ require("lazy").setup({
         end
     },
     {
-        dir ="~/Work/projects/ChatGPT.nvim",
+        "jackMort/ChatGPT.nvim",
         event = "VeryLazy",
         config = function()
             require("chatgpt").setup({})
