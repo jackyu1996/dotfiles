@@ -72,6 +72,11 @@ mapkey("n", "<leader>w", "<cmd>write<CR>", mapping_opts)
 mapkey("n", "<leader>x", "<cmd>quitall!<CR>", mapping_opts)
 mapkey("x", "<leader>a", "<cmd>EasyAlign<CR>", mapping_opts)
 mapkey("n", "<leader>e", vim.diagnostic.open_float, mapping_opts)
+mapkey("n", "<F5>", "<cmd>lua require'dap'.toggle_breakpoint()<CR>", mapping_opts)
+mapkey("n", "<F6>", "<cmd>lua require'dap'.continue()<CR>", mapping_opts)
+mapkey("n", "<F7>", "<cmd>lua require'dap'.step_into()<CR>", mapping_opts)
+mapkey("n", "<F8>", "<cmd>lua require'dap'.step_over()<CR>", mapping_opts)
+mapkey("n", "<F9>", "<cmd>lua require'dap'.step_out()<CR>", mapping_opts)
 mapkey("n", "[d", vim.diagnostic.goto_prev, mapping_opts)
 mapkey("n", "]d", vim.diagnostic.goto_next, mapping_opts)
 mapkey("n", "<leader>q", vim.diagnostic.setloclist, mapping_opts)
@@ -442,5 +447,106 @@ require("lazy").setup({
         dependencies = {
             "MunifTanjim/nui.nvim"
         }
+    },
+    {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "mfussenegger/nvim-dap" },
+        config = function()
+            local dap, dapui = require("dap"), require("dapui")
+            dapui.setup()
+
+            dap.listeners.after.event_initialized["dapui_config"] = function()
+                dapui.open()
+            end
+            dap.listeners.before.event_terminated["dapui_config"] = function()
+                dapui.close()
+            end
+            dap.listeners.before.event_exited["dapui_config"] = function()
+                dapui.close()
+            end
+
+            dap.adapters.python = function(cb, config)
+                if config.request == 'attach' then
+                    local port = (config.connect or config).port
+                    local host = (config.connect or config).host or '127.0.0.1'
+                    cb({
+                            type = 'server',
+                            port = assert(port, '`connect.port` is required for a python `attach` configuration'),
+                            host = host,
+                            options = {
+                                source_filetype = 'python',
+                            },
+                        })
+                else
+                    cb({
+                            type = 'executable',
+                            command = get_python_path('.'),
+                            args = { '-m', 'debugpy.adapter' },
+                            options = {
+                                source_filetype = 'python',
+                            },
+                        })
+                end
+            end
+            dap.adapters.gdb = {
+                type = "executable",
+                command = "gdb",
+                args = { "-i", "dap" }
+            }
+            dap.adapters.delve = {
+                type = 'server',
+                port = '${port}',
+                executable = {
+                    command = 'dlv',
+                    args = {'dap', '-l', '127.0.0.1:${port}'},
+                }
+            }
+
+            dap.configurations.python = {
+                {
+                    type = 'python';
+                    request = 'launch';
+                    name = "Launch file";
+
+                    program = "${file}";
+                    pythonPath = get_python_path('.')
+                },
+            }
+            dap.configurations.c = {
+                {
+                    name = "Launch",
+                    type = "gdb",
+                    request = "launch",
+                    program = function()
+                        return fn.input('Path to executable: ', fn.getcwd() .. '/', 'file')
+                    end,
+                    cwd = "${workspaceFolder}",
+                },
+            }
+            dap.configurations.rust = dap.configurations.c
+            dap.configurations.go = {
+                {
+                    type = "delve",
+                    name = "Debug",
+                    request = "launch",
+                    program = "${file}"
+                },
+                {
+                    type = "delve",
+                    name = "Debug test", -- configuration for debugging test files
+                    request = "launch",
+                    mode = "test",
+                    program = "${file}"
+                },
+                -- works with go.mod packages and sub packages
+                {
+                    type = "delve",
+                    name = "Debug test (go.mod)",
+                    request = "launch",
+                    mode = "test",
+                    program = "./${relativeFileDirname}"
+                }
+            }
+        end
     }
 })
