@@ -56,7 +56,7 @@ mapkey("n", "<C-h>", "<C-w>h", mapping_opts)
 mapkey("n", "<C-j>", "<C-w>j", mapping_opts)
 mapkey("n", "<C-k>", "<C-w>k", mapping_opts)
 mapkey("n", "<C-l>", "<C-w>l", mapping_opts)
-mapkey("n", "<F11>", "<cmd>terminal<CR>", mapping_opts)
+mapkey("n", "<F11>", "<cmd>split | resize 20 | terminal<CR>", mapping_opts)
 mapkey("t", "<C-w><ESC>", "<C-\\><C-n>", mapping_opts)
 mapkey("n", "<leader>b", "<cmd>SymbolsOutline<CR>", mapping_opts)
 mapkey("n", "<leader>c", "<cmd>ChatGPT<CR>", mapping_opts)
@@ -71,7 +71,6 @@ mapkey("n", "<leader>t", "<cmd>NvimTreeToggle<CR>", mapping_opts)
 mapkey("n", "<leader>w", "<cmd>write<CR>", mapping_opts)
 mapkey("n", "<leader>x", "<cmd>quitall!<CR>", mapping_opts)
 mapkey("x", "<leader>a", "<cmd>EasyAlign<CR>", mapping_opts)
-mapkey("n", "<leader>e", vim.diagnostic.open_float, mapping_opts)
 mapkey("n", "<F5>", "<cmd>lua require'dap'.toggle_breakpoint()<CR>", mapping_opts)
 mapkey("n", "<F6>", "<cmd>lua require'dap'.continue()<CR>", mapping_opts)
 mapkey("n", "<F7>", "<cmd>lua require'dap'.step_into()<CR>", mapping_opts)
@@ -79,7 +78,6 @@ mapkey("n", "<F8>", "<cmd>lua require'dap'.step_over()<CR>", mapping_opts)
 mapkey("n", "<F9>", "<cmd>lua require'dap'.step_out()<CR>", mapping_opts)
 mapkey("n", "[d", vim.diagnostic.goto_prev, mapping_opts)
 mapkey("n", "]d", vim.diagnostic.goto_next, mapping_opts)
-mapkey("n", "<leader>q", vim.diagnostic.setloclist, mapping_opts)
 mapkey("t", "<Esc>", "<C-\\><C-n>", mapping_opts)
 mapkey("c", "%s/", "%s/\\v", mapping_opts)
 
@@ -453,7 +451,8 @@ require("lazy").setup({
         end
     },
     {
-        "jackMort/ChatGPT.nvim",
+        -- "jackMort/ChatGPT.nvim",
+        dir = "~/Work/projects/ChatGPT.nvim",
         event = "VeryLazy",
         config = function()
             require("chatgpt").setup({})
