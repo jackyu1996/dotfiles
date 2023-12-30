@@ -7,4 +7,5 @@ export XMODIFIERS="@im=fcitx"
 
 setxkbmap -option caps:ctrl_modifier
 systemctl --user import-environment DISPLAY
+autorandr --change
 exec /usr/bin/i3
