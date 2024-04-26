@@ -3,6 +3,7 @@ patch:
     - schema: double_pinyin_flypy
     - schema: double_pinyin_flypy_hk
     - schema: double_pinyin_flypy_tw
+    - schema: pinyin_simp
 
   switcher:
     hotkeys:

@@ -85,7 +85,7 @@ bar {
     }
 }
 
-new_window none
+default_border none
 hide_edge_borders both
 for_window [class="^.*"] border pixel 0
 for_window [class="Anki"] floating enable

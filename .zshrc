@@ -60,7 +60,7 @@ export GOPROXY="https://goproxy.cn,direct"
 export GOPATH="$HOME/.go"
 export PIPENV_PYPI_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
 export ANDROID_SDK_ROOT="$HOME/.android/sdk/"
-export PATH="${PATH}:$HOME/.local/bin"
+export PATH="${PATH}:$HOME/.local/bin:$GOPATH/bin"
 export VISUAL=vim
 export NVM_DIR="$HOME/.nvm"
 
