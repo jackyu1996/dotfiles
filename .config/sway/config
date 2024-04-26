@@ -1,0 +1,132 @@
+set $mod Mod4
+set $left h
+set $down j
+set $up k
+set $right l
+set $term alacritty
+set $menu wofi --show drun
+blur enable
+shadows enable
+default_dim_inactive 0.2
+
+input 1739:30383:DLL082A:01_06CB:76AF_Touchpad {
+    tap enabled
+}
+
+bar {
+    swaybar_command waybar
+}
+
+exec swayidle -w \
+         timeout 300 'swaylock -e -F -f -c 000000' \
+         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         before-sleep 'swaylock -e -F -f -c 000000'
+
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+q kill
+bindsym $mod+d exec $menu
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+x swaylock -e -f -F -c 000000
+floating_modifier $mod normal
+
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+set $WS1   1:
+set $WS2   2:
+set $WS3   3:
+set $WS4   4:ﴬ
+set $WS5   5:
+set $WS6   6:
+set $WS7   7:
+set $WS8   8:﬜
+set $WS9   9:
+
+bindsym $mod+1 workspace $WS1
+bindsym $mod+2 workspace $WS2
+bindsym $mod+3 workspace $WS3
+bindsym $mod+4 workspace $WS4
+bindsym $mod+5 workspace $WS5
+bindsym $mod+6 workspace $WS6
+bindsym $mod+7 workspace $WS7
+bindsym $mod+8 workspace $WS8
+bindsym $mod+9 workspace $WS9
+
+bindsym $mod+Shift+1 move container to workspace $WS1
+bindsym $mod+Shift+2 move container to workspace $WS2
+bindsym $mod+Shift+3 move container to workspace $WS3
+bindsym $mod+Shift+4 move container to workspace $WS4
+bindsym $mod+Shift+5 move container to workspace $WS5
+bindsym $mod+Shift+6 move container to workspace $WS6
+bindsym $mod+Shift+7 move container to workspace $WS7
+bindsym $mod+Shift+8 move container to workspace $WS8
+bindsym $mod+Shift+9 move container to workspace $WS9
+
+bindsym $mod+semicolon splith
+bindsym $mod+comma splitv
+
+bindsym $mod+w layout tabbed
+bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+f fullscreen
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+mode "resize" {
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+default_border none
+hide_edge_borders both
+for_window [class="^.*"] border pixel 0
+for_window [class="Anki"] floating enable
+for_window [class="Gimp"] floating enable
+for_window [class="idea"] floating enable
+for_window [class="Telegram"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="pref"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
+gaps inner 10
+gaps outer 0
+smart_gaps on
+
+bindsym $mod+m exec cliphist list | wofi --show dmenu | cliphist decode | wl-copy
+bindsym $mod+v exec neovide
+bindsym $mod+p exec wofi-pass -t -s
+bindsym $mod+g exec goldendict
+bindsym $mod+n exec ~/.local/bin/switch-window
+bindsym $mod+Shift+n exec dunstctl close-all
+
+bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle && notify-send "Sound" "$(amixer sget Master | grep -E -o -m 1 '\[(off|on)\]')"
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5% && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5% && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%- && notify-send "Brightness Level" "$(brightnessctl get)%"
+bindsym XF86MonBrightnessUp exec brightnessctl set +5% && notify-send "Brightness Level" "$(brightnessctl get)%"
+
+exec --no-startup-id $term -e tmux
+exec --no-startup-id dunst
+exec --no-startup-id fcitx5 -d
+exec --no-startup-id firefox --private-window
+exec --no-startup-id gammastep
+exec --no-startup-id ianny
+exec --no-startup-id kanshi
+exec --no-startup-id swaybg -i ~/.wallpapers/1.jpg -m fill
+exec --no-startup-id wl-paste --watch cliphist store
+
+include /etc/sway/config.d/*

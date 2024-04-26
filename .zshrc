@@ -7,7 +7,6 @@ zinit wait lucid for \
     zdharma-continuum/fast-syntax-highlighting \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
-    marzocchi/zsh-notify \
     agkozak/zsh-z
 
 zstyle ':prompt:pure:path' color white
