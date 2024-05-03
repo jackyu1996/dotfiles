@@ -17,16 +17,11 @@ bar {
     swaybar_command waybar
 }
 
-exec swayidle -w \
-         timeout 300 'swaylock -e -F -f -c 000000' \
-         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-         before-sleep 'swaylock -e -F -f -c 000000'
-
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 bindsym $mod+d exec $menu
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+x swaylock -e -f -F -c 000000
+bindsym $mod+Shift+x exec swaylock -e -f -F -c 000001
 floating_modifier $mod normal
 
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
@@ -108,6 +103,7 @@ smart_gaps on
 
 bindsym $mod+m exec cliphist list | wofi --show dmenu | cliphist decode | wl-copy
 bindsym $mod+v exec neovide
+bindsym $mod+x exec firefox --private-window
 bindsym $mod+p exec wofi-pass -t -s
 bindsym $mod+g exec goldendict
 bindsym $mod+n exec ~/.local/bin/switch-window
@@ -121,8 +117,6 @@ bindsym XF86MonBrightnessUp exec brightnessctl set +5% && notify-send "Brightnes
 
 exec --no-startup-id $term -e tmux
 exec --no-startup-id dunst
-exec --no-startup-id fcitx5 -d
-exec --no-startup-id firefox --private-window
 exec --no-startup-id gammastep
 exec --no-startup-id ianny
 exec --no-startup-id kanshi
