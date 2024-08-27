@@ -57,3 +57,5 @@ rofi.window-format:          {t}
 rofi.theme:                  dmenu
 rofi.combi-hide-mode-prefix: true
 
+Xcursor.theme: capitaine-cursors
+Xcursor.size: 24

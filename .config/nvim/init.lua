@@ -10,13 +10,13 @@ env = vim.env
 lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not loop.fs_stat(lazypath) then
     fn.system({
-            "git",
-            "clone",
-            "--filter=blob:none",
-            "https://github.com/folke/lazy.nvim.git",
-            "--branch=stable",
-            lazypath,
-        })
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
 end
 opt.rtp:prepend(lazypath)
 
@@ -59,7 +59,6 @@ mapkey("n", "<C-l>", "<C-w>l", mapping_opts)
 mapkey("n", "<F11>", "<cmd>split | resize 20 | terminal<CR>", mapping_opts)
 mapkey("t", "<C-w><ESC>", "<C-\\><C-n>", mapping_opts)
 mapkey("n", "<leader>b", "<cmd>SymbolsOutline<CR>", mapping_opts)
-mapkey("n", "<leader>c", "<cmd>ChatGPT<CR>", mapping_opts)
 mapkey("n", "<leader>e", "<cmd>TroubleToggle<CR>", mapping_opts)
 mapkey("n", "<leader>h", "<cmd>set hlsearch!<CR>", mapping_opts)
 mapkey("n", "<leader>k", "<cmd>Telescope keymaps<CR>", mapping_opts)
@@ -103,7 +102,6 @@ opt.listchars = { tab = "» ", extends = "›", precedes = "‹", space = "·", 
 opt.mouse = "a"
 opt.startofline = false
 opt.number = true
-opt.pastetoggle = "<F12>"
 opt.relativenumber = true
 opt.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
 opt.shiftround = true
@@ -123,24 +121,24 @@ opt.whichwrap = "b,s,h,l,<,>,[,]"
 
 api.nvim_create_augroup("LspAttach_inlayhints", {})
 api.nvim_create_autocmd("LspAttach", {
-        group = "LspAttach_inlayhints",
-        callback = function(args)
-            if not (args.data and args.data.client_id) then
-                return
-            end
+    group = "LspAttach_inlayhints",
+    callback = function(args)
+        if not (args.data and args.data.client_id) then
+            return
+        end
 
-            local bufnr = args.buf
-            local client = lsp.get_client_by_id(args.data.client_id)
-            require("lsp-inlayhints").on_attach(client, bufnr)
-        end,
-    })
+        local bufnr = args.buf
+        local client = lsp.get_client_by_id(args.data.client_id)
+        require("lsp-inlayhints").on_attach(client, bufnr)
+    end,
+})
 
 function get_python_path(workspace)
     if env.VIRTUAL_ENV then
         return fn.resolve(env.VIRTUAL_ENV .. '/bin/python')
     end
 
-    for _, pattern in ipairs({'*', '.*'}) do
+    for _, pattern in ipairs({ '*', '.*' }) do
         local match = fn.glob(fn.resolve(workspace .. '/' .. pattern .. '/pyvenv.cfg'))
         if match ~= '' then
             return fn.resolve(fn.resolve(match) .. '/bin/python')
@@ -152,92 +150,105 @@ function get_python_path(workspace)
 end
 
 require("lazy").setup({
-        { "nvim-treesitter/nvim-treesitter-context" },
-        {
-            "nvim-treesitter/nvim-treesitter-textobjects",
-            lazy = true
+    {
+        "yetone/avante.nvim",
+        event = "VeryLazy",
+        build = "make",
+        opts = {
         },
-        {
-            "nvim-treesitter/nvim-treesitter",
-            config = function()
-                require("nvim-treesitter.configs").setup({
-                        ensure_installed = {
-                            "c", "lua", "python", "go", "rust", "bash",
-                            "css", "javascript", "html", "diff", "json",
-                            "latex", "sql", "xml", "yaml"
-                        },
-                        sync_install = false,
-                        auto_install = true,
-                        enable = true,
-                        highlight = {
-                            enable = true,
-                        }
-                    })
-            end
+        dependencies = {
+            "nvim-tree/nvim-web-devicons",
+            "stevearc/dressing.nvim",
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
         },
-        {
-            "neovim/nvim-lspconfig",
-            config = function()
-                local lspconfig = require('lspconfig')
+    },
+    { "nvim-treesitter/nvim-treesitter-context" },
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        lazy = true
+    },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = {
+                    "c", "lua", "python", "go", "rust", "bash",
+                    "css", "javascript", "html", "diff", "json",
+                    "latex", "sql", "xml", "yaml"
+                },
+                sync_install = false,
+                auto_install = true,
+                enable = true,
+                highlight = {
+                    enable = true,
+                }
+            })
+        end
+    },
+    {
+        "neovim/nvim-lspconfig",
+        config = function()
+            local lspconfig = require('lspconfig')
 
-                lspconfig.pylsp.setup({
-                        before_init = function(_, config)
-                            config.settings.python.pythonPath = get_python_path(config.root_dir)
-                        end
-                    })
+            lspconfig.pylsp.setup({
+                before_init = function(_, config)
+                    config.settings.python.pythonPath = get_python_path(config.root_dir)
+                end
+            })
 
-                lspconfig.emmet_ls.setup({
-                        filetypes = {
-                            "astro", "css", "eruby", "html", "htmldjango",
-                            "javascriptreact", "less", "pug", "sass", "scss",
-                            "svelte", "typescriptreact", "vue", "template"
-                        }
-                    })
+            lspconfig.emmet_ls.setup({
+                filetypes = {
+                    "astro", "css", "eruby", "html", "htmldjango",
+                    "javascriptreact", "less", "pug", "sass", "scss",
+                    "svelte", "typescriptreact", "vue", "template"
+                }
+            })
 
-                lspconfig.html.setup({
-                        filetypes = {
-                            "html", "template"
-                        }
-                    })
-            end
-        },
-        {
-            "williamboman/mason.nvim",
-            event = "VeryLazy",
-            config = function()
-                require("mason").setup({})
-            end
-        },
-        {
-            "williamboman/mason-lspconfig.nvim",
-            config = function()
-                require("mason-lspconfig").setup({})
-            end
-        },
-        {
-            "ray-x/lsp_signature.nvim",
-            config = function()
-                require("lsp_signature").setup({})
-            end
-        },
-        {
-            "hrsh7th/cmp-nvim-lsp",
-            config = function()
-                local on_attach = function(client, bufnr)
-                    api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-                    local bufopts = { noremap = true, silent = true, buffer = bufnr }
-                    mapkey("n", "gD", lsp.buf.declaration, bufopts)
-                    mapkey("n", "gd", lsp.buf.definition, bufopts)
-                    mapkey("n", "gr", lsp.buf.references, bufopts)
-                    mapkey("n", "gi", lsp.buf.implementation, bufopts)
-                    mapkey("n", "K", lsp.buf.hover, bufopts)
-                    mapkey("n", "<C-S-k>", lsp.buf.signature_help, bufopts)
-                    mapkey("n", "<space>D", lsp.buf.type_definition, bufopts)
-                    mapkey("n", "<space>rn", lsp.buf.rename, bufopts)
-                    mapkey("n", "<space>ca", lsp.buf.code_action, bufopts)
-                    mapkey("n", "<space>f", function()
-                        lsp.buf.format { async = true }
-                    end, bufopts)
+            lspconfig.html.setup({
+                filetypes = {
+                    "html", "template"
+                }
+            })
+        end
+    },
+    {
+        "williamboman/mason.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("mason").setup({})
+        end
+    },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        config = function()
+            require("mason-lspconfig").setup({})
+        end
+    },
+    {
+        "ray-x/lsp_signature.nvim",
+        config = function()
+            require("lsp_signature").setup({})
+        end
+    },
+    {
+        "hrsh7th/cmp-nvim-lsp",
+        config = function()
+            local on_attach = function(client, bufnr)
+                api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+                local bufopts = { noremap = true, silent = true, buffer = bufnr }
+                mapkey("n", "gD", lsp.buf.declaration, bufopts)
+                mapkey("n", "gd", lsp.buf.definition, bufopts)
+                mapkey("n", "gr", lsp.buf.references, bufopts)
+                mapkey("n", "gi", lsp.buf.implementation, bufopts)
+                mapkey("n", "K", lsp.buf.hover, bufopts)
+                mapkey("n", "<C-S-k>", lsp.buf.signature_help, bufopts)
+                mapkey("n", "<space>D", lsp.buf.type_definition, bufopts)
+                mapkey("n", "<space>rn", lsp.buf.rename, bufopts)
+                mapkey("n", "<space>ca", lsp.buf.code_action, bufopts)
+                mapkey("n", "<space>f", function()
+                    lsp.buf.format { async = true }
+                end, bufopts)
             end
 
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -280,45 +291,45 @@ require("lazy").setup({
             local cmp = require("cmp")
 
             cmp.setup({
-                    snippet = {
-                        expand = function(args)
-                            require("luasnip").lsp_expand(args.body)
-                        end,
-                    },
-                    window = {
-                        completion = cmp.config.window.bordered(),
-                        documentation = cmp.config.window.bordered(),
-                    },
-                    mapping = cmp.mapping.preset.insert({
-                            ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-                            ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                            ["<C-Space>"] = cmp.mapping.complete(),
-                            ["<C-e>"] = cmp.mapping.abort(),
-                            ["<CR>"] = cmp.mapping.confirm({ select = true }),
-                        }),
-                    sources = cmp.config.sources({
-                            { name = "nvim_lsp" },
-                            { name = "luasnip" },
-                        }, {
-                            { name = "buffer" },
-                        })
+                snippet = {
+                    expand = function(args)
+                        require("luasnip").lsp_expand(args.body)
+                    end,
+                },
+                window = {
+                    completion = cmp.config.window.bordered(),
+                    documentation = cmp.config.window.bordered(),
+                },
+                mapping = cmp.mapping.preset.insert({
+                    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+                    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                    ["<C-Space>"] = cmp.mapping.complete(),
+                    ["<C-e>"] = cmp.mapping.abort(),
+                    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+                }),
+                sources = cmp.config.sources({
+                    { name = "nvim_lsp" },
+                    { name = "luasnip" },
+                }, {
+                    { name = "buffer" },
                 })
+            })
 
             cmp.setup.cmdline("/", {
-                    mapping = cmp.mapping.preset.cmdline(),
-                    sources = {
-                        { name = "buffer" }
-                    }
-                })
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = {
+                    { name = "buffer" }
+                }
+            })
 
             cmp.setup.cmdline(":", {
-                    mapping = cmp.mapping.preset.cmdline(),
-                    sources = cmp.config.sources({
-                            { name = "path" }
-                        }, {
-                            { name = "cmdline" }
-                        })
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = cmp.config.sources({
+                    { name = "path" }
+                }, {
+                    { name = "cmdline" }
                 })
+            })
         end
     },
     {
@@ -337,9 +348,9 @@ require("lazy").setup({
         "windwp/nvim-autopairs",
         config = function()
             require("nvim-autopairs").setup({
-                    fast_wrap = {},
-                    map_c_h = true,
-                })
+                fast_wrap = {},
+                map_c_h = true,
+            })
         end
     },
     {
@@ -357,22 +368,23 @@ require("lazy").setup({
         end
     },
     {
-        "nvim-telescope/telescope.nvim", branch = "0.1.x",
+        "nvim-telescope/telescope.nvim",
+        branch = "0.1.x",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
             require("telescope").setup({
-                    defaults = {
-                        vimgrep_arguments = {
-                            "rg",
-                            "--color=never",
-                            "--no-heading",
-                            "--with-filename",
-                            "--line-number",
-                            "--column",
-                            "--smart-case",
-                        }
+                defaults = {
+                    vimgrep_arguments = {
+                        "rg",
+                        "--color=never",
+                        "--no-heading",
+                        "--with-filename",
+                        "--line-number",
+                        "--column",
+                        "--smart-case",
                     }
-                })
+                }
+            })
         end
     },
     {
@@ -392,13 +404,13 @@ require("lazy").setup({
         "nvim-lualine/lualine.nvim",
         config = function()
             require("lualine").setup({
-                    options = {
-                        theme = "onedark",
-                        section_separators = "",
-                        component_separators = "",
+                options = {
+                    theme = "onedark",
+                    section_separators = "",
+                    component_separators = "",
 
-                    },
-                })
+                },
+            })
         end
     },
     {
@@ -451,17 +463,6 @@ require("lazy").setup({
         end
     },
     {
-        -- "jackMort/ChatGPT.nvim",
-        dir = "~/Work/projects/ChatGPT.nvim",
-        event = "VeryLazy",
-        config = function()
-            require("chatgpt").setup({})
-        end,
-        dependencies = {
-            "MunifTanjim/nui.nvim"
-        }
-    },
-    {
         "rcarriga/nvim-dap-ui",
         dependencies = {
             "mfussenegger/nvim-dap",
@@ -486,22 +487,22 @@ require("lazy").setup({
                     local port = (config.connect or config).port
                     local host = (config.connect or config).host or '127.0.0.1'
                     cb({
-                            type = 'server',
-                            port = assert(port, '`connect.port` is required for a python `attach` configuration'),
-                            host = host,
-                            options = {
-                                source_filetype = 'python',
-                            },
-                        })
+                        type = 'server',
+                        port = assert(port, '`connect.port` is required for a python `attach` configuration'),
+                        host = host,
+                        options = {
+                            source_filetype = 'python',
+                        },
+                    })
                 else
                     cb({
-                            type = 'executable',
-                            command = get_python_path('.'),
-                            args = { '-m', 'debugpy.adapter' },
-                            options = {
-                                source_filetype = 'python',
-                            },
-                        })
+                        type = 'executable',
+                        command = get_python_path('.'),
+                        args = { '-m', 'debugpy.adapter' },
+                        options = {
+                            source_filetype = 'python',
+                        },
+                    })
                 end
             end
             dap.adapters.gdb = {
@@ -514,17 +515,17 @@ require("lazy").setup({
                 port = '${port}',
                 executable = {
                     command = 'dlv',
-                    args = {'dap', '-l', '127.0.0.1:${port}'},
+                    args = { 'dap', '-l', '127.0.0.1:${port}' },
                 }
             }
 
             dap.configurations.python = {
                 {
-                    type = 'python';
-                    request = 'launch';
-                    name = "Launch file";
+                    type = 'python',
+                    request = 'launch',
+                    name = "Launch file",
 
-                    program = "${file}";
+                    program = "${file}",
                     pythonPath = get_python_path('.')
                 },
             }

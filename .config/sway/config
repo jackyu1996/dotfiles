@@ -5,9 +5,9 @@ set $up k
 set $right l
 set $term alacritty
 set $menu wofi --show drun
-blur enable
-shadows enable
-default_dim_inactive 0.2
+#blur enable
+#shadows enable
+#default_dim_inactive 0.2
 
 input 1739:30383:DLL082A:01_06CB:76AF_Touchpad {
     tap enabled
@@ -21,7 +21,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 bindsym $mod+d exec $menu
 bindsym $mod+Shift+c reload
-bindsym $mod+Shift+x exec swaylock -e -f -F -c 000001
+bindsym $mod+Shift+x exec swaylock -e -f -F -c 000000
 floating_modifier $mod normal
 
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
@@ -109,6 +109,7 @@ bindsym $mod+g exec goldendict
 bindsym $mod+n exec ~/.local/bin/switch-window
 bindsym $mod+Shift+n exec dunstctl close-all
 
+bindsym Print exec grim -g "$(slurp)"
 bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle && notify-send "Sound" "$(amixer sget Master | grep -E -o -m 1 '\[(off|on)\]')"
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5% && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5% && notify-send "Volume" "$(amixer sget Master | grep -E -o -m 1 '[0-9]+?%')"
@@ -122,5 +123,8 @@ exec --no-startup-id ianny
 exec --no-startup-id kanshi
 exec --no-startup-id swaybg -i ~/.wallpapers/1.jpg -m fill
 exec --no-startup-id wl-paste --watch cliphist store
+exec --no-start-up-id swayidle \
+    timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on" && pkill swayidle'
 
 include /etc/sway/config.d/*

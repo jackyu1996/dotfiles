@@ -44,7 +44,6 @@ set autoindent
 set autoread
 set background=dark
 set backspace=indent,eol,start
-set clipboard=unnamedplus
 set completeopt=longest,menuone,popup,noinsert,noselect
 set completepopup=border:off
 set conceallevel=1
@@ -212,6 +211,8 @@ nnoremap <leader>w :write<CR>
 nnoremap <leader>x :quitall!<CR>
 nnoremap / /\v
 cnoremap %s/ %s/\v
+nnoremap <C-@> :call system("wl-copy", @")<CR>
+xnoremap <silent> <C-@> :w !wl-copy<CR><CR>
 "}}}
 " Netrw{{{
 let g:netrw_banner = 0
