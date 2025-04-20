@@ -10,5 +10,5 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
     export GTK_THEME=Materia
     export GDK_BACKEND=wayland
 
-    exec sway
+    exec Hyprland
 fi

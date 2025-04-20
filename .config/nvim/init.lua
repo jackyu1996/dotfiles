@@ -256,7 +256,7 @@ require("lazy").setup({
             local servers = {
                 "bashls", "clangd", "cssls", "cssmodules_ls", "emmet_ls", "eslint", "gopls", "html", "jdtls",
                 "biome", "pylsp", "kotlin_language_server", "rust_analyzer", "lua_ls", "svelte",
-                "tailwindcss", "tsserver", "zk", "lemminx", "sqlls", "texlab", "docker_compose_language_service",
+                "tailwindcss", "ts_ls", "zk", "lemminx", "sqlls", "texlab", "docker_compose_language_service",
                 "pyre", "remark_ls", "yamlls"
             }
 
@@ -352,6 +352,15 @@ require("lazy").setup({
                 map_c_h = true,
             })
         end
+    },
+    {
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+        },
+        keys = {
+            { "<leader>/", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+        },
     },
     {
         "numToStr/Comment.nvim",
