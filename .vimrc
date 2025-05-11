@@ -211,8 +211,9 @@ nnoremap <leader>w :write<CR>
 nnoremap <leader>x :quitall!<CR>
 nnoremap / /\v
 cnoremap %s/ %s/\v
-nnoremap <C-@> :call system("wl-copy", @")<CR>
-xnoremap <silent> <C-@> :w !wl-copy<CR><CR>
+xnoremap "+y y:call system("wl-copy", @")<CR>
+nnoremap "+p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<CR>p
+nnoremap "*p :let @"=substitute(system("wl-paste --no-newline --primary"), '<C-v><C-m>', '', 'g')<CR>p
 "}}}
 " Netrw{{{
 let g:netrw_banner = 0

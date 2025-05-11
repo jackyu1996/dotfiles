@@ -59,7 +59,7 @@ mapkey("n", "<C-l>", "<C-w>l", mapping_opts)
 mapkey("n", "<F11>", "<cmd>split | resize 20 | terminal<CR>", mapping_opts)
 mapkey("t", "<C-w><ESC>", "<C-\\><C-n>", mapping_opts)
 mapkey("n", "<leader>b", "<cmd>SymbolsOutline<CR>", mapping_opts)
-mapkey("n", "<leader>e", "<cmd>TroubleToggle<CR>", mapping_opts)
+mapkey("n", "<leader>e", "<cmd>Trouble<CR>", mapping_opts)
 mapkey("n", "<leader>h", "<cmd>set hlsearch!<CR>", mapping_opts)
 mapkey("n", "<leader>k", "<cmd>Telescope keymaps<CR>", mapping_opts)
 mapkey("n", "<leader>n", "<cmd>Telescope buffers<CR>", mapping_opts)
@@ -155,6 +155,10 @@ require("lazy").setup({
         event = "VeryLazy",
         build = "make",
         opts = {
+            provider = "gemini",
+            gemini = {
+                proxy = "http://127.0.0.1:8080",
+            }
         },
         dependencies = {
             "nvim-tree/nvim-web-devicons",
