@@ -68,3 +68,10 @@ source /usr/share/fzf/key-bindings.zsh
 source ~/.aliases
 source ~/.functions
 source ~/.config/broot/launcher/bash/br
+
+export PNPM_HOME="/home/jack/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
