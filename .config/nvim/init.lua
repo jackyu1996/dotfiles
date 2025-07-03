@@ -1,22 +1,27 @@
-api = vim.api
-fn = vim.fn
-g = vim.g
-lsp = vim.lsp
-mapkey = vim.keymap.set
-opt = vim.opt
-loop = vim.loop
-env = vim.env
+local api = vim.api
+local env = vim.env
+local fn = vim.fn
+local g = vim.g
+local loop = vim.loop
+local lsp = vim.lsp
+local mapkey = vim.keymap.set
+local opt = vim.opt
+local uv = vim.uv
+local v = vim.v
 
-lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not loop.fs_stat(lazypath) then
-    fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable",
-        lazypath,
-    })
+local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (uv or loop).fs_stat(lazypath) then
+    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+    local out = fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+    if v.shell_error ~= 0 then
+        api.nvim_echo({
+            { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+            { out,                            "WarningMsg" },
+            { "\nPress any key to exit..." },
+        }, true, {})
+        fn.getchar()
+        os.exit(1)
+    end
 end
 opt.rtp:prepend(lazypath)
 
@@ -44,7 +49,7 @@ ResetGuiFont = function()
     RefreshGuiFont()
 end
 
-mapping_opts = { noremap = true, silent = true }
+local mapping_opts = { noremap = true, silent = true }
 
 mapkey("c", "<C-n>", "<down>", mapping_opts)
 mapkey("c", "<C-p>", "<up>", mapping_opts)
@@ -58,7 +63,7 @@ mapkey("n", "<C-k>", "<C-w>k", mapping_opts)
 mapkey("n", "<C-l>", "<C-w>l", mapping_opts)
 mapkey("n", "<F11>", "<cmd>split | resize 20 | terminal<CR>", mapping_opts)
 mapkey("t", "<C-w><ESC>", "<C-\\><C-n>", mapping_opts)
-mapkey("n", "<leader>b", "<cmd>SymbolsOutline<CR>", mapping_opts)
+mapkey("n", "<leader>b", "<cmd>Outline<CR>", mapping_opts)
 mapkey("n", "<leader>e", "<cmd>Trouble<CR>", mapping_opts)
 mapkey("n", "<leader>h", "<cmd>set hlsearch!<CR>", mapping_opts)
 mapkey("n", "<leader>k", "<cmd>Telescope keymaps<CR>", mapping_opts)
@@ -119,21 +124,7 @@ opt.undofile = true
 opt.virtualedit = "block"
 opt.whichwrap = "b,s,h,l,<,>,[,]"
 
-api.nvim_create_augroup("LspAttach_inlayhints", {})
-api.nvim_create_autocmd("LspAttach", {
-    group = "LspAttach_inlayhints",
-    callback = function(args)
-        if not (args.data and args.data.client_id) then
-            return
-        end
-
-        local bufnr = args.buf
-        local client = lsp.get_client_by_id(args.data.client_id)
-        require("lsp-inlayhints").on_attach(client, bufnr)
-    end,
-})
-
-function get_python_path(workspace)
+local function get_python_path(workspace)
     if env.VIRTUAL_ENV then
         return fn.resolve(env.VIRTUAL_ENV .. '/bin/python')
     end
@@ -155,9 +146,10 @@ require("lazy").setup({
         event = "VeryLazy",
         build = "make",
         opts = {
-            provider = "gemini",
-            gemini = {
-                proxy = "http://127.0.0.1:8080",
+            providers = {
+                gemini = {
+                    proxy = "http://127.0.0.1:8080",
+                }
             }
         },
         dependencies = {
@@ -170,7 +162,7 @@ require("lazy").setup({
     { "nvim-treesitter/nvim-treesitter-context" },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
-        lazy = true
+        event = "VeryLazy"
     },
     {
         "nvim-treesitter/nvim-treesitter",
@@ -186,7 +178,8 @@ require("lazy").setup({
                 enable = true,
                 highlight = {
                     enable = true,
-                }
+                },
+                build = ":TSUpdate"
             })
         end
     },
@@ -217,7 +210,7 @@ require("lazy").setup({
         end
     },
     {
-        "williamboman/mason.nvim",
+        "mason-org/mason.nvim",
         event = "VeryLazy",
         config = function()
             require("mason").setup({})
@@ -231,6 +224,7 @@ require("lazy").setup({
     },
     {
         "ray-x/lsp_signature.nvim",
+        event = "InsertEnter",
         config = function()
             require("lsp_signature").setup({})
         end
@@ -270,17 +264,12 @@ require("lazy").setup({
         end
     },
     {
-        "lvimuser/lsp-inlayhints.nvim",
-        config = function()
-            require("lsp-inlayhints").setup()
-        end
-    },
-    {
         "honza/vim-snippets",
         event = "InsertEnter",
     },
     {
         "L3MON4D3/LuaSnip",
+        version = "v2.*",
         config = function()
             require("luasnip.loaders.from_snipmate").lazy_load()
         end
@@ -382,6 +371,7 @@ require("lazy").setup({
     },
     {
         "nvim-telescope/telescope.nvim",
+        event = "VeryLazy",
         branch = "0.1.x",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
@@ -408,7 +398,7 @@ require("lazy").setup({
     },
     {
         "nvim-tree/nvim-web-devicons",
-        lazy = true,
+        event = "VeryLazy",
         config = function()
             require("nvim-web-devicons").setup({ default = true })
         end
@@ -433,7 +423,8 @@ require("lazy").setup({
         end
     },
     {
-        "sindrets/diffview.nvim"
+        "sindrets/diffview.nvim",
+        event = "VeryLazy"
     },
     {
         "ggandor/leap.nvim",
@@ -461,22 +452,47 @@ require("lazy").setup({
         end
     },
     {
+        "kosayoda/nvim-lightbulb",
+    },
+    {
+        'nvimdev/dashboard-nvim',
+        event = 'VimEnter',
+        config = function()
+            require('dashboard').setup({})
+        end,
+        dependencies = { { 'nvim-tree/nvim-web-devicons' } }
+    },
+    {
+        "nvim-neotest/neotest",
+        event = "VeryLazy",
+        dependencies = {
+            "nvim-neotest/nvim-nio",
+            "nvim-lua/plenary.nvim",
+            "antoinemadec/FixCursorHold.nvim",
+            "nvim-treesitter/nvim-treesitter"
+        }
+    },
+    {
         "romgrk/barbar.nvim"
     },
     {
-        "simrat39/symbols-outline.nvim",
+        "hedyhli/outline.nvim",
+        event = "VeryLazy",
+        cmd = { "Outline", "OutlineOpen" },
         config = function()
-            require("symbols-outline").setup({})
+            require("outline").setup({})
         end
     },
     {
         "folke/trouble.nvim",
+        event = "VeryLazy",
         config = function()
             require("trouble").setup({})
         end
     },
     {
         "rcarriga/nvim-dap-ui",
+        event = "VeryLazy",
         dependencies = {
             "mfussenegger/nvim-dap",
             "nvim-neotest/nvim-nio"
@@ -578,5 +594,23 @@ require("lazy").setup({
                 }
             }
         end
+    },
+    {
+        "ThePrimeagen/refactoring.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        opts = {},
+    },
+    {
+        'rmagatti/auto-session',
+        opts = {},
+    },
+    {
+        'stevearc/conform.nvim',
+        event = "VeryLazy",
+        opts = {},
     }
 })

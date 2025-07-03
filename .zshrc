@@ -57,9 +57,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export GO111MODULE=on
 export GOPROXY="https://goproxy.cn,direct"
 export GOPATH="$HOME/.go"
-export PIPENV_PYPI_MIRROR="https://pypi.tuna.tsinghua.edu.cn/simple"
 export ANDROID_SDK_ROOT="$HOME/.android/sdk/"
-export PATH="${PATH}:$HOME/.local/bin:$GOPATH/bin"
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="${PATH}:$HOME/.local/bin:$GOPATH/bin:$PNPM_HOME/"
 export VISUAL=nvim
 export NVM_DIR="$HOME/.nvm"
 
@@ -68,4 +68,3 @@ source /usr/share/fzf/key-bindings.zsh
 source ~/.aliases
 source ~/.functions
 source ~/.config/broot/launcher/bash/br
-
