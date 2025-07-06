@@ -210,17 +210,15 @@ require("lazy").setup({
         end
     },
     {
-        "mason-org/mason.nvim",
-        event = "VeryLazy",
-        config = function()
-            require("mason").setup({})
-        end
-    },
-    {
-        "williamboman/mason-lspconfig.nvim",
-        config = function()
-            require("mason-lspconfig").setup({})
-        end
+        "mason-org/mason-lspconfig.nvim",
+        opts = {},
+        dependencies = {
+            { "mason-org/mason.nvim", opts = {}, event = "VeryLazy" },
+            "neovim/nvim-lspconfig",
+        },
+        config = {
+            automatic_enable = false,
+        }
     },
     {
         "ray-x/lsp_signature.nvim",
@@ -397,13 +395,6 @@ require("lazy").setup({
         end
     },
     {
-        "nvim-tree/nvim-web-devicons",
-        event = "VeryLazy",
-        config = function()
-            require("nvim-web-devicons").setup({ default = true })
-        end
-    },
-    {
         "nvim-lualine/lualine.nvim",
         config = function()
             require("lualine").setup({
@@ -460,7 +451,9 @@ require("lazy").setup({
         config = function()
             require('dashboard').setup({})
         end,
-        dependencies = { { 'nvim-tree/nvim-web-devicons' } }
+        dependencies = {
+            { 'nvim-tree/nvim-web-devicons' }
+        }
     },
     {
         "nvim-neotest/neotest",
