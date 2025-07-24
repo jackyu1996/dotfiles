@@ -146,9 +146,15 @@ require("lazy").setup({
         event = "VeryLazy",
         build = "make",
         opts = {
+            provider = "moonshot",
             providers = {
-                gemini = {
-                    proxy = "http://127.0.0.1:8080",
+                moonshot = {
+                    endpoint = "https://api.moonshot.cn/v1",
+                    model = "kimi-k2-0711-preview",
+                    extra_request_body = {
+                        temperature = 0.75,
+                        max_tokens = 32768,
+                    }
                 }
             }
         },
@@ -230,7 +236,7 @@ require("lazy").setup({
     {
         "hrsh7th/cmp-nvim-lsp",
         config = function()
-            local on_attach = function(client, bufnr)
+            local on_attach = function(_, bufnr)
                 api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
                 local bufopts = { noremap = true, silent = true, buffer = bufnr }
                 mapkey("n", "gD", lsp.buf.declaration, bufopts)
@@ -343,15 +349,6 @@ require("lazy").setup({
                 map_c_h = true,
             })
         end
-    },
-    {
-        "HakonHarnes/img-clip.nvim",
-        event = "VeryLazy",
-        opts = {
-        },
-        keys = {
-            { "<leader>/", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
-        },
     },
     {
         "numToStr/Comment.nvim",
