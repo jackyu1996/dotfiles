@@ -62,9 +62,13 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="${PATH}:$HOME/.local/bin:$GOPATH/bin:$PNPM_HOME/"
 export VISUAL=nvim
 export NVM_DIR="$HOME/.nvm"
+export IDEA_JDK="$HOME/.jbr/jbr_jcef-21.0.8-linux-x64-b1038.68"
+export IDEA_JFK="$HOME/.jbr/jbr_jcef-21.0.8-linux-x64-b1038.68"
 
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
 source ~/.aliases
 source ~/.functions
 source ~/.config/broot/launcher/bash/br
+
+. "$HOME/.cargo/env"

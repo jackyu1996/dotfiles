@@ -62,6 +62,8 @@ mapkey("n", "<C-j>", "<C-w>j", mapping_opts)
 mapkey("n", "<C-k>", "<C-w>k", mapping_opts)
 mapkey("n", "<C-l>", "<C-w>l", mapping_opts)
 mapkey("n", "<F11>", "<cmd>split | resize 20 | terminal<CR>", mapping_opts)
+mapkey({ 'n', 'x', 'o' }, 's', '<Plug>(leap)', mapping_opts)
+mapkey('n', 'S', '<Plug>(leap-from-window)', mapping_opts)
 mapkey("t", "<C-w><ESC>", "<C-\\><C-n>", mapping_opts)
 mapkey("n", "<leader>b", "<cmd>Outline<CR>", mapping_opts)
 mapkey("n", "<leader>e", "<cmd>Trouble<CR>", mapping_opts)
@@ -101,6 +103,7 @@ opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.hlsearch = false
 opt.ignorecase = true
 opt.incsearch = true
+opt.laststatus = 3
 opt.lazyredraw = true
 opt.list = true
 opt.listchars = { tab = "» ", extends = "›", precedes = "‹", space = "·", trail = "·" }
@@ -136,16 +139,31 @@ local function get_python_path(workspace)
         end
     end
 
-    -- Fallback to system Python.
     return fn.exepath('python3') or fn.exepath('python') or 'python'
 end
 
 require("lazy").setup({
     {
-        "yetone/avante.nvim",
-        event = "VeryLazy",
-        build = "make",
+        "folke/snacks.nvim",
+        priority = 1000,
+        lazy = false,
         opts = {
+            bigfile = { enabled = true },
+            dashboard = { enabled = true },
+            indent = { enabled = true },
+            input = { enabled = true },
+            picker = { enabled = true },
+            notifier = { enabled = true },
+            scroll = { enabled = true },
+        },
+    },
+    {
+        "yetone/avante.nvim",
+        build = "make",
+        event = "VeryLazy",
+        version = false,
+        opts = {
+            instructions_file = "agent.md",
             provider = "moonshot",
             providers = {
                 moonshot = {
@@ -159,16 +177,10 @@ require("lazy").setup({
             }
         },
         dependencies = {
-            "nvim-tree/nvim-web-devicons",
-            "stevearc/dressing.nvim",
             "nvim-lua/plenary.nvim",
             "MunifTanjim/nui.nvim",
+            "nvim-tree/nvim-web-devicons",
         },
-    },
-    { "nvim-treesitter/nvim-treesitter-context" },
-    {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        event = "VeryLazy"
     },
     {
         "nvim-treesitter/nvim-treesitter",
@@ -189,18 +201,17 @@ require("lazy").setup({
             })
         end
     },
+    { "nvim-treesitter/nvim-treesitter-context" },
+    { "nvim-treesitter/nvim-treesitter-textobjects" },
+    { "nvim-treesitter/nvim-treesitter-refactor" },
+    {
+        "mason-org/mason.nvim",
+        opts = {}
+    },
     {
         "neovim/nvim-lspconfig",
         config = function()
-            local lspconfig = require('lspconfig')
-
-            lspconfig.pylsp.setup({
-                before_init = function(_, config)
-                    config.settings.python.pythonPath = get_python_path(config.root_dir)
-                end
-            })
-
-            lspconfig.emmet_ls.setup({
+            lsp.config('emmet_ls', {
                 filetypes = {
                     "astro", "css", "eruby", "html", "htmldjango",
                     "javascriptreact", "less", "pug", "sass", "scss",
@@ -208,23 +219,12 @@ require("lazy").setup({
                 }
             })
 
-            lspconfig.html.setup({
+            lsp.config('html', {
                 filetypes = {
                     "html", "template"
                 }
             })
         end
-    },
-    {
-        "mason-org/mason-lspconfig.nvim",
-        opts = {},
-        dependencies = {
-            { "mason-org/mason.nvim", opts = {}, event = "VeryLazy" },
-            "neovim/nvim-lspconfig",
-        },
-        config = {
-            automatic_enable = false,
-        }
     },
     {
         "ray-x/lsp_signature.nvim",
@@ -233,50 +233,14 @@ require("lazy").setup({
             require("lsp_signature").setup({})
         end
     },
-    {
-        "hrsh7th/cmp-nvim-lsp",
-        config = function()
-            local on_attach = function(_, bufnr)
-                api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-                local bufopts = { noremap = true, silent = true, buffer = bufnr }
-                mapkey("n", "gD", lsp.buf.declaration, bufopts)
-                mapkey("n", "gd", lsp.buf.definition, bufopts)
-                mapkey("n", "gr", lsp.buf.references, bufopts)
-                mapkey("n", "gi", lsp.buf.implementation, bufopts)
-                mapkey("n", "K", lsp.buf.hover, bufopts)
-                mapkey("n", "<C-S-k>", lsp.buf.signature_help, bufopts)
-                mapkey("n", "<space>D", lsp.buf.type_definition, bufopts)
-                mapkey("n", "<space>rn", lsp.buf.rename, bufopts)
-                mapkey("n", "<space>ca", lsp.buf.code_action, bufopts)
-                mapkey("n", "<space>f", function()
-                    lsp.buf.format { async = true }
-                end, bufopts)
-            end
-
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-            local servers = {
-                "bashls", "clangd", "cssls", "cssmodules_ls", "emmet_ls", "eslint", "gopls", "html", "jdtls",
-                "biome", "pylsp", "kotlin_language_server", "rust_analyzer", "lua_ls", "svelte",
-                "tailwindcss", "ts_ls", "zk", "lemminx", "sqlls", "texlab", "docker_compose_language_service",
-                "pyre", "remark_ls", "yamlls"
-            }
-
-            for _, server in ipairs(servers) do
-                require("lspconfig")[server].setup({ capabilities = capabilities, on_attach = on_attach })
-            end
-        end
-    },
-    {
-        "honza/vim-snippets",
-        event = "InsertEnter",
-    },
+    { "hrsh7th/cmp-nvim-lsp" },
     {
         "L3MON4D3/LuaSnip",
         version = "v2.*",
         config = function()
-            require("luasnip.loaders.from_snipmate").lazy_load()
-        end
+            require("luasnip.loaders.from_vscode").lazy_load()
+        end,
+        dependencies = { "rafamadriz/friendly-snippets" },
     },
     { "saadparwaiz1/cmp_luasnip" },
     { "hrsh7th/cmp-buffer" },
@@ -305,14 +269,14 @@ require("lazy").setup({
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
                 }),
                 sources = cmp.config.sources({
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" },
+                    { name = 'luasnip' },
+                    { name = 'nvim_lsp' },
                 }, {
                     { name = "buffer" },
                 })
             })
 
-            cmp.setup.cmdline("/", {
+            cmp.setup.cmdline({ "/", "?" }, {
                 mapping = cmp.mapping.preset.cmdline(),
                 sources = {
                     { name = "buffer" }
@@ -325,8 +289,40 @@ require("lazy").setup({
                     { name = "path" }
                 }, {
                     { name = "cmdline" }
-                })
+                }),
+                matching = { disallow_symbol_nonprefix_matching = false }
             })
+
+            local on_attach = function(_, bufnr)
+                api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+                local bufopts = { noremap = true, silent = true, buffer = bufnr }
+                mapkey("n", "gD", lsp.buf.declaration, bufopts)
+                mapkey("n", "gd", lsp.buf.definition, bufopts)
+                mapkey("n", "gr", lsp.buf.references, bufopts)
+                mapkey("n", "gi", lsp.buf.implementation, bufopts)
+                mapkey("n", "K", lsp.buf.hover, bufopts)
+                mapkey("n", "<C-S-k>", lsp.buf.signature_help, bufopts)
+                mapkey("n", "<space>D", lsp.buf.type_definition, bufopts)
+                mapkey("n", "<space>rn", lsp.buf.rename, bufopts)
+                mapkey("n", "<space>ca", lsp.buf.code_action, bufopts)
+                mapkey("n", "<space>f", function()
+                    lsp.buf.format { async = true }
+                end, bufopts)
+            end
+
+            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+            local servers = {
+                "bashls", "clangd", "cssls", "cssmodules_ls", "emmet_ls", "eslint", "gopls", "html", "jdtls",
+                "biome", "pylsp", "kotlin_language_server", "rust_analyzer", "lua_ls", "svelte",
+                "tailwindcss", "ts_ls", "zk", "lemminx", "sqlls", "texlab", "docker_compose_language_service",
+                "pyre", "yamlls"
+            }
+
+            lsp.config('*', { capabilities = capabilities, on_attach = on_attach })
+            for _, server in ipairs(servers) do
+                lsp.enable(server)
+            end
         end
     },
     {
@@ -335,7 +331,7 @@ require("lazy").setup({
     },
     {
         "kylechui/nvim-surround",
-        version = "*",
+        version = "^3.0.0",
         event = "VeryLazy",
         config = function()
             require("nvim-surround").setup({})
@@ -343,6 +339,7 @@ require("lazy").setup({
     },
     {
         "windwp/nvim-autopairs",
+        event = "InsertEnter",
         config = function()
             require("nvim-autopairs").setup({
                 fast_wrap = {},
@@ -352,10 +349,7 @@ require("lazy").setup({
     },
     {
         "numToStr/Comment.nvim",
-        event = "VeryLazy",
-        config = function()
-            require("Comment").setup({})
-        end
+        opts = {},
     },
     {
         "nvim-tree/nvim-tree.lua",
@@ -406,6 +400,7 @@ require("lazy").setup({
     },
     {
         "navarasu/onedark.nvim",
+        priority = 1000,
         config = function()
             require("onedark").load()
         end
@@ -416,21 +411,11 @@ require("lazy").setup({
     },
     {
         "ggandor/leap.nvim",
-        event = "VeryLazy",
-        config = function()
-            require("leap").set_default_keymaps {}
-        end
+        event = "VeryLazy"
     },
     {
         "andymass/vim-matchup",
         event = "VimEnter",
-    },
-    {
-        "lukas-reineke/indent-blankline.nvim",
-        main = "ibl",
-        config = function()
-            require("ibl").setup({})
-        end
     },
     { "RRethy/vim-illuminate" },
     {
@@ -441,16 +426,11 @@ require("lazy").setup({
     },
     {
         "kosayoda/nvim-lightbulb",
-    },
-    {
-        'nvimdev/dashboard-nvim',
-        event = 'VimEnter',
         config = function()
-            require('dashboard').setup({})
-        end,
-        dependencies = {
-            { 'nvim-tree/nvim-web-devicons' }
-        }
+            require("nvim-lightbulb").setup({
+                autocmd = { enabled = true }
+            })
+        end
     },
     {
         "nvim-neotest/neotest",
@@ -462,9 +442,7 @@ require("lazy").setup({
             "nvim-treesitter/nvim-treesitter"
         }
     },
-    {
-        "romgrk/barbar.nvim"
-    },
+    { "romgrk/barbar.nvim" },
     {
         "hedyhli/outline.nvim",
         event = "VeryLazy",
@@ -478,14 +456,14 @@ require("lazy").setup({
         event = "VeryLazy",
         config = function()
             require("trouble").setup({})
-        end
+        end,
+        cmd = "Trouble",
     },
     {
         "rcarriga/nvim-dap-ui",
         event = "VeryLazy",
         dependencies = {
             "mfussenegger/nvim-dap",
-            "nvim-neotest/nvim-nio"
         },
         config = function()
             local dap, dapui = require("dap"), require("dapui")
@@ -545,7 +523,7 @@ require("lazy").setup({
                     name = "Launch file",
 
                     program = "${file}",
-                    pythonPath = get_python_path('.')
+                    pythonPath = get_python_path("."),
                 },
             }
             dap.configurations.c = {
@@ -569,12 +547,11 @@ require("lazy").setup({
                 },
                 {
                     type = "delve",
-                    name = "Debug test", -- configuration for debugging test files
+                    name = "Debug test",
                     request = "launch",
                     mode = "test",
                     program = "${file}"
                 },
-                -- works with go.mod packages and sub packages
                 {
                     type = "delve",
                     name = "Debug test (go.mod)",
@@ -588,19 +565,9 @@ require("lazy").setup({
     {
         "ThePrimeagen/refactoring.nvim",
         event = "VeryLazy",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter",
-        },
-        opts = {},
+        config = function()
+            require('refactoring').setup({})
+        end
     },
-    {
-        'rmagatti/auto-session',
-        opts = {},
-    },
-    {
-        'stevearc/conform.nvim',
-        event = "VeryLazy",
-        opts = {},
-    }
+    { 'rmagatti/auto-session' },
 })
