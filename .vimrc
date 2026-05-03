@@ -160,9 +160,9 @@ let g:tagbar_type_markdown = {
 let g:tex_flavor = "latex"
 let g:vimtex_view_method = "zathura"
 let g:vimtex_quickfix_mode = 0
-if empty(v:servername) && exists('*remote_startserver')
-    call remote_startserver('VIM')
-endif
+" if empty(v:servername) && exists('*remote_startserver')
+"     call remote_startserver('VIM')
+" endif
 " }}}
 " Youcompleteme{{{
 let g:ycm_collect_identifiers_from_comments_and_strings = 1

@@ -62,7 +62,10 @@ mapkey("n", "<C-j>", "<C-w>j", mapping_opts)
 mapkey("n", "<C-k>", "<C-w>k", mapping_opts)
 mapkey("n", "<C-l>", "<C-w>l", mapping_opts)
 mapkey("n", "<F11>", "<cmd>split | resize 20 | terminal<CR>", mapping_opts)
+mapkey({ 'n', 'x', 'o' }, 's', '<Plug>(leap)', mapping_opts)
+mapkey('n', 'S', '<Plug>(leap-from-window)', mapping_opts)
 mapkey("t", "<C-w><ESC>", "<C-\\><C-n>", mapping_opts)
+mapkey("n", "<leader>c", "<cmd>Sidekick cli toggle<CR>", mapping_opts)
 mapkey("n", "<leader>b", "<cmd>Outline<CR>", mapping_opts)
 mapkey("n", "<leader>e", "<cmd>Trouble<CR>", mapping_opts)
 mapkey("n", "<leader>h", "<cmd>set hlsearch!<CR>", mapping_opts)
@@ -97,10 +100,11 @@ opt.expandtab = true
 opt.foldenable = true
 opt.foldlevelstart = 99
 opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.hlsearch = false
 opt.ignorecase = true
 opt.incsearch = true
+opt.laststatus = 3
 opt.lazyredraw = true
 opt.list = true
 opt.listchars = { tab = "» ", extends = "›", precedes = "‹", space = "·", trail = "·" }
@@ -545,7 +549,7 @@ require("lazy").setup({
                     name = "Launch file",
 
                     program = "${file}",
-                    pythonPath = get_python_path('.')
+                    pythonPath = get_python_path("."),
                 },
             }
             dap.configurations.c = {
