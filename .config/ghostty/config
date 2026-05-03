@@ -1,0 +1,10 @@
+background-blur = true
+background-opacity = 0.8
+font-family = Fira Code
+font-size = 13
+keybind = super+r=reload_config
+mouse-hide-while-typing = true
+scrollback-limit = 1000000
+shell-integration = zsh
+theme = One Half Dark
+window-save-state = always

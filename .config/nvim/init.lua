@@ -410,7 +410,7 @@ require("lazy").setup({
         event = "VeryLazy"
     },
     {
-        "ggandor/leap.nvim",
+        url = "https://codeberg.org/andyg/leap.nvim",
         event = "VeryLazy"
     },
     {
