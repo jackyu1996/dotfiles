@@ -99,7 +99,7 @@ opt.expandtab = true
 opt.foldenable = true
 opt.foldlevelstart = 99
 opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
+--opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.hlsearch = false
 opt.ignorecase = true
 opt.incsearch = true
@@ -144,6 +144,14 @@ end
 
 require("lazy").setup({
     {
+        "arborist-ts/arborist.nvim",
+        config = function()
+            require("arborist").setup({
+                prefer_wasm = false,
+            })
+        end
+    },
+    {
         "folke/snacks.nvim",
         priority = 1000,
         lazy = false,
@@ -182,28 +190,28 @@ require("lazy").setup({
             "nvim-tree/nvim-web-devicons",
         },
     },
-    {
-        "nvim-treesitter/nvim-treesitter",
-        config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = {
-                    "c", "lua", "python", "go", "rust", "bash",
-                    "css", "javascript", "html", "diff", "json",
-                    "latex", "sql", "xml", "yaml"
-                },
-                sync_install = false,
-                auto_install = true,
-                enable = true,
-                highlight = {
-                    enable = true,
-                },
-                build = ":TSUpdate"
-            })
-        end
-    },
+    --{
+    --"nvim-treesitter/nvim-treesitter",
+    --config = function()
+    --require("nvim-treesitter.configs").setup({
+    --ensure_installed = {
+    --"c", "lua", "python", "go", "rust", "bash",
+    --"css", "javascript", "html", "diff", "json",
+    --"latex", "sql", "xml", "yaml"
+    --},
+    --sync_install = false,
+    --auto_install = true,
+    --enable = true,
+    --highlight = {
+    --enable = true,
+    --},
+    --build = ":TSUpdate"
+    --})
+    --end
+    --},
     { "nvim-treesitter/nvim-treesitter-context" },
-    { "nvim-treesitter/nvim-treesitter-textobjects" },
-    { "nvim-treesitter/nvim-treesitter-refactor" },
+    --{ "nvim-treesitter/nvim-treesitter-textobjects" },
+    --{ "nvim-treesitter/nvim-treesitter-refactor" },
     {
         "mason-org/mason.nvim",
         opts = {}
@@ -417,7 +425,7 @@ require("lazy").setup({
         "andymass/vim-matchup",
         event = "VimEnter",
     },
-    { "RRethy/vim-illuminate" },
+    --{ "RRethy/vim-illuminate" },
     {
         "folke/todo-comments.nvim",
         config = function()
@@ -439,7 +447,7 @@ require("lazy").setup({
             "nvim-neotest/nvim-nio",
             "nvim-lua/plenary.nvim",
             "antoinemadec/FixCursorHold.nvim",
-            "nvim-treesitter/nvim-treesitter"
+            --"nvim-treesitter/nvim-treesitter"
         }
     },
     { "romgrk/barbar.nvim" },
@@ -562,12 +570,12 @@ require("lazy").setup({
             }
         end
     },
-    {
-        "ThePrimeagen/refactoring.nvim",
-        event = "VeryLazy",
-        config = function()
-            require('refactoring').setup({})
-        end
-    },
+    --{
+    --"ThePrimeagen/refactoring.nvim",
+    --event = "VeryLazy",
+    --config = function()
+    --require('refactoring').setup({})
+    --end
+    --},
     { 'rmagatti/auto-session' },
 })
