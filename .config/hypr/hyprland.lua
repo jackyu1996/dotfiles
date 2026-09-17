@@ -183,3 +183,10 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("wl-paste --watch cliphist store")
 end)
 
+hl.window_rule({
+    name = "firefox",
+    match = {
+      class = "firefox"
+    },
+    workspace = 2
+})
