@@ -9,6 +9,7 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
     export XDG_SESSION_TYPE=wayland
     export GTK_THEME=Materia
     export GDK_BACKEND=wayland
+    export GDK_WAYLAND_DISABLE=ext_background_effect_manager_v1
 
     exec start-hyprland
 fi
